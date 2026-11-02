@@ -1,0 +1,21 @@
+{
+  "name": "ai-buyer",
+  "version": "1.0.0",
+  "description": "AI Buyer Intelligence & Google Search Real Estate Lead Engine",
+  "main": "api/status.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "build": "echo 'Build complete'"
+  },
+  "keywords": [
+    "ai-buyer",
+    "real-estate",
+    "google-ads",
+    "lead-generation",
+    "buyer-intent",
+    "dubai-real-estate"
+  ],
+  "author": "bigbigboss67",
+  "license": "MIT"
+}
