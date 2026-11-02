@@ -3,13 +3,11 @@ const fs = require('fs');
 const path = require('path');
 const url = require('url');
 
-const enquiriesHandler = require('./api/enquiries');
-const searchDemandHandler = require('./api/search-demand');
-const exportHandler = require('./api/export');
 const statusHandler = require('./api/status');
-const dorkMinerHandler = require('./api/dork-miner');
+const searchDemandHandler = require('./api/search-demand');
 const webhookHandler = require('./api/webhook');
-const fetchingAgentHandler = require('./api/fetching-agent');
+const liveScraperHandler = require('./api/live-scraper');
+const exportHandler = require('./api/export');
 
 const PORT = process.env.PORT || 3000;
 
@@ -33,7 +31,7 @@ const server = http.createServer((req, res) => {
   // Enable CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
   if (req.method === 'OPTIONS') {
     res.statusCode = 200;
@@ -48,14 +46,10 @@ const server = http.createServer((req, res) => {
 
     if (pathname === '/api/status') {
       return statusHandler(req, res);
-    } else if (pathname === '/api/enquiries') {
-      return enquiriesHandler(req, res);
-    } else if (pathname === '/api/dork-miner') {
-      return dorkMinerHandler(req, res);
+    } else if (pathname === '/api/live-scraper') {
+      return liveScraperHandler(req, res);
     } else if (pathname === '/api/webhook') {
       return webhookHandler(req, res);
-    } else if (pathname === '/api/fetching-agent') {
-      return fetchingAgentHandler(req, res);
     } else if (pathname === '/api/search-demand') {
       return searchDemandHandler(req, res);
     } else if (pathname === '/api/export') {

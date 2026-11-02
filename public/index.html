@@ -3,223 +3,110 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI Buyer - Real Estate Enquiry & Google Ad Intelligence</title>
+  <title>AI Buyer • Real Estate Live Demand & Scraping Engine</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com">
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #070a13;
-      --card-bg: rgba(16, 23, 38, 0.78);
+      --bg-dark: #07090e;
+      --card-bg: rgba(15, 23, 42, 0.75);
       --card-border: rgba(255, 255, 255, 0.08);
-      --primary: #3b82f6;
-      --primary-glow: rgba(59, 130, 246, 0.35);
       --accent: #10b981;
-      --accent-glow: rgba(16, 185, 129, 0.35);
-      --amber: #f59e0b;
-      --purple: #8b5cf6;
-      --text: #f3f4f6;
-      --text-muted: #9ca3af;
-      --text-sub: #6b7280;
+      --accent-glow: rgba(16, 185, 129, 0.25);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-sub: #64748b;
     }
-
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
+      background: var(--bg-dark);
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(16, 185, 129, 0.08) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(59, 130, 246, 0.08) 0px, transparent 50%),
+        radial-gradient(at 50% 100%, rgba(139, 92, 246, 0.05) 0px, transparent 50%);
+      color: var(--text-main);
       font-family: 'Plus Jakarta Sans', sans-serif;
-      background: radial-gradient(circle at 50% 0%, #111a30 0%, #070a13 65%);
-      color: var(--text);
       min-height: 100vh;
-      padding-bottom: 80px;
+      display: flex;
+      flex-direction: column;
     }
-
     .container {
-      max-width: 1360px;
+      max-width: 1380px;
       margin: 0 auto;
       padding: 32px 24px;
+      width: 100%;
     }
-
-    /* Header */
-    header {
+    .header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 28px;
-      padding-bottom: 24px;
+      padding-bottom: 20px;
       border-bottom: 1px solid var(--card-border);
-    }
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 14px;
+      flex-wrap: wrap;
+      gap: 16px;
     }
     .logo-badge {
-      width: 48px;
-      height: 48px;
-      border-radius: 14px;
-      background: linear-gradient(135deg, #10b981, #059669);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 24px;
-      box-shadow: 0 0 24px var(--accent-glow);
-    }
-    .brand h1 {
-      font-size: 22px;
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      background: linear-gradient(to right, #ffffff, #a7f3d0);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .brand p {
-      font-size: 13px;
-      color: var(--text-muted);
-    }
-
-    .top-badges {
       display: flex;
       align-items: center;
       gap: 12px;
+    }
+    .logo-icon {
+      width: 44px;
+      height: 44px;
+      background: linear-gradient(135deg, #10b981, #059669);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      box-shadow: 0 4px 20px var(--accent-glow);
+    }
+    .logo-title {
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+    .logo-subtitle {
+      font-size: 12px;
+      color: var(--text-muted);
     }
     .status-pill {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 6px 14px;
-      border-radius: 9999px;
-      background: rgba(16, 185, 129, 0.12);
-      border: 1px solid rgba(16, 185, 129, 0.25);
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.3);
       color: #34d399;
-      font-size: 13px;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 12px;
       font-weight: 600;
     }
-    .pulse-dot {
+    .status-dot {
       width: 8px;
       height: 8px;
-      border-radius: 50%;
       background: #10b981;
-      box-shadow: 0 0 10px #10b981;
+      border-radius: 50%;
       animation: pulse 2s infinite;
     }
-    @keyframes pulse { 0% { opacity: 0.4; } 50% { opacity: 1; } 100% { opacity: 0.4; } }
-
-    /* Control Box */
-    .control-panel {
-      background: var(--card-bg);
-      backdrop-filter: blur(14px);
-      border: 1px solid var(--card-border);
-      border-radius: 20px;
-      padding: 24px 28px;
-      margin-bottom: 28px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.45);
-    }
-
-    .filter-grid {
-      display: grid;
-      grid-template-columns: 2fr 1.5fr 1fr auto;
-      gap: 14px;
-      margin-bottom: 16px;
-    }
-    .filter-item {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-    .filter-label {
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--text-sub);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-    .select-wrap select {
-      width: 100%;
-      height: 50px;
-      background: rgba(10, 15, 26, 0.85);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 12px;
-      padding: 0 16px;
-      color: #fff;
-      font-size: 14px;
-      font-family: inherit;
-      outline: none;
-      cursor: pointer;
-      transition: border-color 0.15s ease;
-    }
-    .select-wrap select:focus {
-      border-color: #10b981;
-      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
-    }
-    .btn-mine {
-      height: 50px;
-      margin-top: auto;
-      padding: 0 26px;
-      background: linear-gradient(135deg, #10b981, #059669);
-      color: #fff;
-      border: none;
-      border-radius: 12px;
-      font-size: 15px;
-      font-weight: 700;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      box-shadow: 0 4px 20px var(--accent-glow);
-      transition: all 0.2s ease;
-      white-space: nowrap;
-    }
-    .btn-mine:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 6px 24px var(--accent-glow);
-    }
-
-    /* Community Presets */
-    .presets {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
-      padding-top: 14px;
-      border-top: 1px solid rgba(255, 255, 255, 0.06);
-    }
-    .presets span {
-      font-size: 12px;
-      color: var(--text-sub);
-      font-weight: 600;
-    }
-    .preset-chip {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      padding: 5px 12px;
-      border-radius: 8px;
-      font-size: 12px;
-      color: var(--text-muted);
-      cursor: pointer;
-      transition: all 0.15s ease;
-    }
-    .preset-chip:hover {
-      background: rgba(16, 185, 129, 0.15);
-      border-color: rgba(16, 185, 129, 0.35);
-      color: #6ee7b7;
+    @keyframes pulse {
+      0% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(1.2); }
+      100% { opacity: 1; transform: scale(1); }
     }
 
     /* Tabs Bar */
     .tabs-bar {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 24px;
-      border-bottom: 1px solid var(--card-border);
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-    .tabs-nav {
-      display: flex;
       gap: 8px;
+      border-bottom: 1px solid var(--card-border);
+      margin-bottom: 24px;
       flex-wrap: wrap;
     }
     .tab-btn {
-      padding: 12px 18px;
+      padding: 12px 20px;
       background: none;
       border: none;
       border-bottom: 2px solid transparent;
@@ -232,677 +119,329 @@
       gap: 8px;
       transition: all 0.2s ease;
     }
+    .tab-btn:hover {
+      color: #fff;
+    }
     .tab-btn.active {
       color: #fff;
       border-bottom-color: #10b981;
     }
     .tab-counter {
-      background: rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.1);
       padding: 2px 8px;
-      border-radius: 9999px;
+      border-radius: 12px;
       font-size: 11px;
-      font-weight: 700;
-    }
-    .tab-btn.active .tab-counter {
-      background: #10b981;
-      color: #fff;
     }
 
-    .export-actions {
-      display: flex;
-      gap: 8px;
-    }
-    .btn-action {
-      padding: 8px 16px;
-      border-radius: 10px;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      color: var(--text);
-      transition: all 0.2s ease;
-    }
-    .btn-action:hover { background: rgba(255, 255, 255, 0.1); }
-    .btn-action.highlight {
-      background: rgba(16, 185, 129, 0.15);
-      border-color: rgba(16, 185, 129, 0.3);
-      color: #34d399;
-    }
-
-    /* Views */
     .tab-content { display: none; }
     .tab-content.active { display: block; }
 
-    /* Enquiry Cards Grid */
-    .enquiries-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
-      gap: 20px;
-    }
-    .enquiry-card {
+    /* Glass Panels */
+    .panel {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
       border-radius: 18px;
-      padding: 22px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-      transition: transform 0.2s ease, border-color 0.2s ease;
-    }
-    .enquiry-card:hover {
-      transform: translateY(-2px);
-      border-color: rgba(16, 185, 129, 0.4);
+      padding: 24px;
+      backdrop-filter: blur(16px);
+      margin-bottom: 24px;
     }
 
-    .card-top-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 12px;
-    }
-    .card-title-group h3 {
-      font-size: 16px;
-      font-weight: 700;
-      color: #fff;
-      margin-bottom: 2px;
-    }
-    .buyer-name-sub {
-      font-size: 13px;
-      color: var(--text-muted);
-      font-weight: 500;
-    }
-    .score-badge {
-      font-size: 11px;
-      font-weight: 700;
-      padding: 4px 10px;
-      border-radius: 6px;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-    .score-high {
-      background: rgba(16, 185, 129, 0.15);
-      color: #34d399;
-      border: 1px solid rgba(16, 185, 129, 0.3);
-    }
-    .score-med {
-      background: rgba(245, 158, 11, 0.15);
-      color: #fbbf24;
-      border: 1px solid rgba(245, 158, 11, 0.3);
-    }
-
-    /* 6-Matrix Data Grid */
-    .data-matrix {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px 14px;
-      background: rgba(0, 0, 0, 0.25);
-      padding: 12px 14px;
-      border-radius: 12px;
-      margin-bottom: 14px;
-      border: 1px solid rgba(255, 255, 255, 0.04);
-    }
-    .matrix-item {
+    /* Input Controls */
+    .input-group {
       display: flex;
       flex-direction: column;
-      gap: 2px;
+      gap: 6px;
+      margin-bottom: 16px;
     }
-    .matrix-lbl {
-      font-size: 10px;
-      font-weight: 600;
+    .input-label {
+      font-size: 12px;
+      font-weight: 700;
       color: var(--text-sub);
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
-    .matrix-val {
-      font-size: 13px;
-      font-weight: 600;
-      color: #f3f4f6;
-      font-family: 'JetBrains Mono', monospace;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+    .text-input, .select-input {
+      width: 100%;
+      height: 46px;
+      background: rgba(10, 15, 26, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 10px;
+      padding: 0 16px;
+      color: #fff;
+      font-size: 14px;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.15s ease;
     }
-    .matrix-val.highlight { color: #34d399; }
-    .phone-unmask-btn {
-      background: none;
+    .text-input:focus, .select-input:focus {
+      border-color: #10b981;
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+    }
+
+    .btn-primary {
+      height: 46px;
+      padding: 0 24px;
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #fff;
       border: none;
-      color: #60a5fa;
-      font-size: 11px;
-      cursor: pointer;
-      text-decoration: underline;
-      margin-left: 6px;
-    }
-
-    /* Notes Box */
-    .notes-box {
-      background: rgba(16, 185, 129, 0.05);
-      border-left: 3px solid #10b981;
-      padding: 10px 12px;
-      border-radius: 0 8px 8px 0;
-      font-size: 12px;
-      color: #d1fae5;
-      line-height: 1.45;
-      margin-bottom: 14px;
-    }
-    .notes-box strong {
-      display: block;
-      color: #6ee7b7;
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-bottom: 3px;
-    }
-
-    /* Card Footer Actions */
-    .card-footer {
-      display: flex;
-      gap: 8px;
-      padding-top: 12px;
-      border-top: 1px solid rgba(255, 255, 255, 0.06);
-    }
-    .btn-wa-direct {
-      flex: 1;
-      height: 38px;
-      background: #10b981;
-      color: #fff;
-      border-radius: 9px;
-      font-size: 13px;
-      font-weight: 600;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      text-decoration: none;
-      transition: background 0.15s ease;
-    }
-    .btn-wa-direct:hover { background: #059669; }
-    .btn-desk-push {
-      height: 38px;
-      padding: 0 12px;
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      color: #fff;
-      border-radius: 9px;
-      font-size: 12px;
-      font-weight: 500;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 14px;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 5px;
+      gap: 8px;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
     }
-    .btn-desk-push:hover { background: rgba(255, 255, 255, 0.12); }
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px var(--accent-glow);
+    }
 
-    /* Dorks / Public Posts Section */
-    .dork-header-banner {
-      background: rgba(59, 130, 246, 0.1);
-      border: 1px solid rgba(59, 130, 246, 0.25);
-      border-radius: 16px;
-      padding: 18px 22px;
-      margin-bottom: 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-    .dork-pills-list {
+    /* Scraper Presets */
+    .presets-bar {
       display: flex;
       gap: 8px;
       flex-wrap: wrap;
-      margin-bottom: 20px;
+      margin-top: 12px;
     }
-    .dork-tag {
+    .preset-pill {
       background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
       padding: 6px 12px;
+      border-radius: 8px;
       font-size: 12px;
-      font-family: 'JetBrains Mono', monospace;
-      color: #93c5fd;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
+      color: var(--text-muted);
+      cursor: pointer;
       transition: all 0.15s ease;
     }
-    .dork-tag:hover {
-      background: rgba(59, 130, 246, 0.2);
-      border-color: rgba(59, 130, 246, 0.4);
-      color: #fff;
+    .preset-pill:hover {
+      background: rgba(16, 185, 129, 0.15);
+      border-color: rgba(16, 185, 129, 0.35);
+      color: #6ee7b7;
     }
 
-    .public-posts-grid {
+    /* Results Grid */
+    .results-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(440px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
       gap: 20px;
     }
-    .post-card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 18px;
-      padding: 22px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-      position: relative;
-      transition: transform 0.2s ease, border-color 0.2s ease;
-    }
-    .post-card:hover {
-      transform: translateY(-2px);
-      border-color: rgba(59, 130, 246, 0.4);
-    }
-    .post-platform-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 11px;
-      font-weight: 700;
-      color: #93c5fd;
-      background: rgba(59, 130, 246, 0.15);
-      border: 1px solid rgba(59, 130, 246, 0.3);
-      padding: 4px 10px;
-      border-radius: 6px;
-      margin-bottom: 10px;
-    }
-    .post-snippet {
-      background: rgba(0, 0, 0, 0.3);
-      border-left: 3px solid #3b82f6;
-      padding: 12px 14px;
-      border-radius: 0 10px 10px 0;
-      font-size: 13px;
-      color: #e5e7eb;
-      line-height: 1.5;
-      margin: 12px 0 16px 0;
-    }
-    .contact-highlight-box {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      background: rgba(16, 185, 129, 0.08);
-      border: 1px solid rgba(16, 185, 129, 0.2);
-      padding: 10px 14px;
-      border-radius: 10px;
-      margin-bottom: 16px;
-    }
-    .contact-highlight-item {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 13px;
-      font-family: 'JetBrains Mono', monospace;
-      color: #34d399;
-    }
-
-    /* Demand Matrix Grid */
-    .demand-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 16px;
-    }
-    .demand-col {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 16px;
-      padding: 18px;
-    }
-    .demand-col h3 {
-      font-size: 13px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-bottom: 12px;
-    }
-    .query-item {
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      padding: 8px 12px;
-      border-radius: 8px;
-      font-size: 13px;
-      margin-bottom: 8px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    /* Ads Preview */
-    .ad-card-item {
+    .result-card {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
       border-radius: 16px;
       padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: border-color 0.2s ease, transform 0.2s ease;
+    }
+    .result-card:hover {
+      border-color: rgba(59, 130, 246, 0.4);
+      transform: translateY(-2px);
+    }
+    .result-card-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 8px;
+      line-height: 1.4;
+    }
+    .result-card-title a {
+      color: inherit;
+      text-decoration: none;
+    }
+    .result-card-title a:hover {
+      color: #60a5fa;
+      text-decoration: underline;
+    }
+    .result-card-snippet {
+      font-size: 13px;
+      color: #cbd5e1;
+      line-height: 1.5;
+      background: rgba(0, 0, 0, 0.25);
+      padding: 12px;
+      border-radius: 8px;
+      border-left: 3px solid #3b82f6;
       margin-bottom: 14px;
     }
-    .sp-tag {
-      background: #10b981;
-      color: #fff;
-      font-size: 10px;
-      font-weight: 700;
-      padding: 2px 6px;
-      border-radius: 4px;
-      margin-right: 8px;
+    .result-card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 12px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      flex-wrap: wrap;
+      gap: 8px;
     }
 
-    /* Loader */
-    .loader-wrap {
-      display: none;
-      padding: 40px;
-      text-align: center;
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 20px;
-      margin-bottom: 24px;
-    }
-    .spinner {
-      width: 40px;
-      height: 40px;
-      border: 4px solid rgba(16, 185, 129, 0.2);
-      border-top-color: #10b981;
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-      margin: 0 auto 14px auto;
-    }
-    @keyframes spin { 100% { transform: rotate(360deg); } }
-
-    /* Toast */
     .toast {
       position: fixed;
       bottom: 24px;
       right: 24px;
-      padding: 12px 20px;
-      border-radius: 12px;
-      background: #1f2937;
+      background: #10b981;
       color: #fff;
+      padding: 12px 20px;
+      border-radius: 10px;
       font-size: 13px;
       font-weight: 600;
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
       display: none;
-      align-items: center;
-      gap: 8px;
-      z-index: 1000;
+      z-index: 999;
     }
+    .spinner {
+      width: 28px;
+      height: 28px;
+      border: 3px solid rgba(255,255,255,0.1);
+      border-radius: 50%;
+      border-top-color: #10b981;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 12px auto;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
   </style>
 </head>
 <body>
-
   <div class="container">
     <!-- Header -->
-    <header>
-      <div class="brand">
-        <div class="logo-badge">⚡</div>
+    <header class="header">
+      <div class="logo-badge">
+        <div class="logo-icon">🔍</div>
         <div>
-          <h1>AI BUYER</h1>
-          <p>Real Estate Buyer Enquiry & Google Search Intent Intelligence Engine</p>
+          <h1 class="logo-title">AI Buyer • Real Estate Live Demand</h1>
+          <p class="logo-subtitle">Live Google Demand & Real-Time API Scraper (Zero Mock Data)</p>
         </div>
       </div>
-      <div class="top-badges">
-        <div class="status-pill">
-          <span class="pulse-dot"></span>
-          <span>Google Search Dork & Lead Engine Active</span>
-        </div>
+      <div class="status-pill">
+        <span class="status-dot"></span>
+        <span>Zero Mock Mode • Real APIs Only</span>
       </div>
     </header>
 
-    <!-- Search / Filter Console -->
-    <div class="control-panel">
-      <div class="filter-grid">
-        <div class="filter-item">
-          <label class="filter-label">Target Community / Area</label>
-          <div class="select-wrap">
-            <select id="selCommunity" onchange="runMining()">
-              <option value="" selected>🌐 All Prime Dubai Communities</option>
-              <option value="Palm Jumeirah">🏝️ Palm Jumeirah</option>
-              <option value="Downtown Dubai">🏙️ Downtown Dubai (Burj Khalifa)</option>
-              <option value="Dubai Hills Estate">⛳ Dubai Hills Estate</option>
-              <option value="Business Bay">🏢 Business Bay (Canal Towers)</option>
-              <option value="Emaar Beachfront">🌊 Emaar Beachfront</option>
-              <option value="Dubai Creek Harbour">⛵ Dubai Creek Harbour</option>
-              <option value="Sobha Hartland / MBR City">🌳 Sobha Hartland (MBR City)</option>
-              <option value="JBR (Jumeirah Beach Residence)">🏖️ JBR & Bluewaters</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="filter-item">
-          <label class="filter-label">Property Type</label>
-          <div class="select-wrap">
-            <select id="selPropertyType" onchange="runMining()">
-              <option value="" selected>💎 All Luxury Types</option>
-              <option value="Beachfront Villa">Beachfront Villa / Mansion</option>
-              <option value="Luxury Penthouse">Luxury Penthouse</option>
-              <option value="Off-Plan 3BR">Off-Plan 3BR / 4BR Residence</option>
-              <option value="1% Monthly Payment Plan">1% Monthly Payment Plan Project</option>
-              <option value="Branded Residence">Branded Residence (Bugatti / Armani / Cavalli)</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="filter-item">
-          <label class="filter-label">Max Enquiries</label>
-          <div class="select-wrap">
-            <select id="selCount" onchange="runMining()">
-              <option value="6">6 Enquiries</option>
-              <option value="8" selected>8 Enquiries</option>
-              <option value="10">10 Enquiries</option>
-            </select>
-          </div>
-        </div>
-
-        <button class="btn-mine" onclick="runMining()">
-          <span>⚡ Mine Buyer Enquiries</span>
-        </button>
-      </div>
-
-      <div class="presets">
-        <span>Quick Focus:</span>
-        <button class="preset-chip" onclick="setQuickPreset('Palm Jumeirah', 'Beachfront Villa')">🏝️ Palm Jumeirah Beachfront</button>
-        <button class="preset-chip" onclick="setQuickPreset('Downtown Dubai', 'Luxury Penthouse')">🏙️ Downtown Burj Penthouses</button>
-        <button class="preset-chip" onclick="setQuickPreset('Dubai Hills Estate', 'Off-Plan 3BR')">⛳ Dubai Hills Villas</button>
-        <button class="preset-chip" onclick="setQuickPreset('Business Bay', 'Branded Residence')">🏢 Business Bay Branded</button>
-        <button class="preset-chip" onclick="setQuickPreset('Emaar Beachfront', 'Beachfront Villa')">🌊 Emaar Beachfront</button>
-      </div>
+    <!-- Navigation Tabs -->
+    <div class="tabs-bar">
+      <button class="tab-btn active" onclick="switchTab('liveScraperTab', this)">
+        <span>🌐 Live Web Scraper (SerpApi / Apify)</span>
+        <span class="tab-counter" id="scraperCount">0</span>
+      </button>
+      <button class="tab-btn" onclick="switchTab('googleDemandTab', this)">
+        <span>🔍 Google Live Demand (Search Volume)</span>
+      </button>
+      <button class="tab-btn" onclick="switchTab('inboundWebhookTab', this); fetchInboundLeads();">
+        <span style="color:#34d399;">⚡ Inbound Lead Webhook</span>
+        <span class="tab-counter" id="webhookCount" style="background:#10b981; color:#fff;">0</span>
+      </button>
     </div>
 
-    <!-- Live Execution Status Bar -->
-    <div class="loader-wrap" id="loaderWrap">
-      <div class="spinner"></div>
-      <h3 id="loaderStatus" style="font-size: 15px; margin-bottom: 4px;">Mining Real Estate Buyer Queries & Google Footprints...</h3>
-      <p style="font-size: 13px; color: var(--text-muted);">Executing Google Search dorks across forums, social groups, and developer ad campaigns</p>
-    </div>
-
-    <!-- Results Area -->
-    <div id="resultsArea">
-      <div class="tabs-bar">
-        <div class="tabs-nav">
-          <button class="tab-btn active" onclick="switchTab('enquiriesTab', this)">
-            <span>📋 Real Estate Buyer Enquiries</span>
-            <span class="tab-counter" id="enquiryCount">0</span>
-          </button>
-          <button class="tab-btn" onclick="switchTab('fetchingAgentTab', this); runFetchingAgent();" style="border-bottom: 2px solid transparent;">
-            <span style="color:#c4b5fd;">🤖 AI Fetching Agent (Multi-Source Live)</span>
-            <span class="tab-counter" id="fetchingCount" style="background:#8b5cf6; color:#fff;">8</span>
-          </button>
-          <button class="tab-btn" onclick="switchTab('dorkPostsTab', this); runDorkMining();">
-            <span>🌐 Public Buyer Footprints (Google Dorks)</span>
-            <span class="tab-counter" id="dorkCount" style="background:#3b82f6; color:#fff;">6</span>
-          </button>
-          <button class="tab-btn" onclick="switchTab('searchDemandTab', this)">
-            <span>🔍 Google Search Demand (Buyer Queries)</span>
-            <span class="tab-counter" id="demandCount">0</span>
-          </button>
-          <button class="tab-btn" onclick="switchTab('developerAdsTab', this)">
-            <span>📢 Developer Google Ads & Campaigns</span>
-            <span class="tab-counter" id="adsCount">0</span>
-          </button>
-          <button class="tab-btn" onclick="switchTab('inboundWebhookTab', this); fetchInboundLeads();">
-            <span style="color:#34d399;">⚡ Live Inbound Leads (Webhook)</span>
-            <span class="tab-counter" id="webhookCount" style="background:#10b981; color:#fff;">0</span>
-          </button>
+    <!-- TAB 1: Live Web Scraper (SerpApi / Apify) -->
+    <div id="liveScraperTab" class="tab-content active">
+      <div class="panel">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:18px; flex-wrap:wrap; gap:12px;">
+          <div>
+            <h2 style="font-size:17px; font-weight:700; color:#fff; margin-bottom:4px;">Real-Time Google & Forum Scraper</h2>
+            <p style="font-size:13px; color:var(--text-muted);">Executes live Google queries to find public discussions, questions, and posts with zero synthetic data.</p>
+          </div>
+          <div style="font-size:12px; color:var(--text-sub);">
+            Get free key: <a href="https://serpapi.com" target="_blank" style="color:#60a5fa;">SerpApi (100 free searches/mo)</a> | <a href="https://apify.com" target="_blank" style="color:#60a5fa;">Apify</a>
+          </div>
         </div>
 
-        <div class="export-actions">
-          <button class="btn-action" onclick="exportEnquiriesCSV()">📥 Export CSV</button>
-          <button class="btn-action highlight" onclick="exportEnquiriesJSON()">📄 Export JSON</button>
-        </div>
-      </div>
-
-      <!-- Tab 1: Real Estate Buyer Enquiries View -->
-      <div id="enquiriesTab" class="tab-content active">
-        <div class="enquiries-grid" id="enquiriesGrid">
-          <!-- Populated dynamically -->
-        </div>
-      </div>
-
-      <!-- Tab 6: Multi-Source AI Fetching Agent View -->
-      <div id="fetchingAgentTab" class="tab-content">
-        <div style="background: rgba(139, 92, 246, 0.08); border: 1px solid rgba(139, 92, 246, 0.25); border-radius: 18px; padding: 22px; margin-bottom: 22px;">
-          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:16px;">
-            <div>
-              <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
-                <span style="font-size:18px;">🤖</span>
-                <h3 style="font-size:17px; color:#c4b5fd; font-weight:700;">Multi-Source AI Fetching Agent</h3>
-                <span style="background:rgba(16,185,129,0.2); border:1px solid #10b981; color:#6ee7b7; padding:2px 8px; border-radius:12px; font-size:11px; font-weight:700;">● LIVE RECENCY FILTER</span>
-              </div>
-              <p style="font-size:13px; color:var(--text-muted); max-width:650px;">
-                Continuously crawls multiple platforms (Reddit, British Expats, ExpatForum, LinkedIn, Facebook Groups, and Google SERPs) extracting fresh property inquiries posted within your chosen time horizon.
-              </p>
-            </div>
-            <button class="btn-action highlight" onclick="runFetchingAgent()" style="background:linear-gradient(135deg, #8b5cf6, #6d28d9); color:#fff; border:none; padding:10px 20px; border-radius:10px; font-weight:700; cursor:pointer; box-shadow:0 4px 15px rgba(139,92,246,0.3);">
-              🚀 Run Multi-Source Scan
+        <!-- API Configuration Bar -->
+        <div style="display:grid; grid-template-columns: 180px 1fr auto; gap:12px; margin-bottom:16px;">
+          <div>
+            <label class="input-label">Provider</label>
+            <select id="scraperProvider" class="select-input" onchange="updateProviderHint()">
+              <option value="serpapi" selected>SerpApi (Google)</option>
+              <option value="apify">Apify Actor</option>
+            </select>
+          </div>
+          <div>
+            <label class="input-label">API Key / Token (Saved locally in browser)</label>
+            <input type="password" id="scraperApiKey" class="text-input" placeholder="Paste your SerpApi Key or Apify Token..." oninput="saveApiKey()">
+          </div>
+          <div style="align-self: flex-end;">
+            <button class="btn-primary" onclick="executeLiveScrape()">
+              <span>🚀 Run Live Search</span>
             </button>
           </div>
-
-          <!-- Active Multi-Source Badges -->
-          <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:18px;">
-            <span style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); padding:4px 10px; border-radius:8px; font-size:11px; color:#d1d5db;">🔴 Reddit (r/dubairealestate)</span>
-            <span style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); padding:4px 10px; border-radius:8px; font-size:11px; color:#d1d5db;">🇬🇧 BritishExpats UAE</span>
-            <span style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); padding:4px 10px; border-radius:8px; font-size:11px; color:#d1d5db;">🌐 ExpatForum Dubai</span>
-            <span style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); padding:4px 10px; border-radius:8px; font-size:11px; color:#d1d5db;">💼 LinkedIn Posts</span>
-            <span style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); padding:4px 10px; border-radius:8px; font-size:11px; color:#d1d5db;">👥 Facebook Groups</span>
-            <span style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); padding:4px 10px; border-radius:8px; font-size:11px; color:#d1d5db;">⚡ Google Live Index</span>
-          </div>
-
-          <!-- Agent Filters Grid -->
-          <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:12px; background:rgba(0,0,0,0.3); padding:14px; border-radius:12px; border:1px solid rgba(255,255,255,0.06);">
-            <div>
-              <label style="font-size:11px; font-weight:700; color:var(--text-sub); text-transform:uppercase; display:block; margin-bottom:5px;">⏳ Recency / Freshness</label>
-              <select id="agentTimeRange" onchange="runFetchingAgent()" style="width:100%; height:38px; background:rgba(10,15,26,0.9); border:1px solid rgba(255,255,255,0.15); border-radius:8px; color:#fff; padding:0 10px; font-size:13px;">
-                <option value="24h">Past 24 Hours (Ultra Fresh)</option>
-                <option value="7d" selected>Past 7 Days (Active Buyers)</option>
-                <option value="30d">Past 30 Days (Current Month)</option>
-              </select>
-            </div>
-            <div>
-              <label style="font-size:11px; font-weight:700; color:var(--text-sub); text-transform:uppercase; display:block; margin-bottom:5px;">🌐 Source Platform</label>
-              <select id="agentSource" onchange="runFetchingAgent()" style="width:100%; height:38px; background:rgba(10,15,26,0.9); border:1px solid rgba(255,255,255,0.15); border-radius:8px; color:#fff; padding:0 10px; font-size:13px;">
-                <option value="all" selected>All Sources (Multi-Source Feed)</option>
-                <option value="reddit">Reddit (r/dubairealestate)</option>
-                <option value="expat_forums">Expat Relocation Portals</option>
-                <option value="linkedin">LinkedIn Executive Posts</option>
-                <option value="social">Facebook Investor Groups</option>
-                <option value="google_dorks">Google Live Dorks</option>
-              </select>
-            </div>
-            <div>
-              <label style="font-size:11px; font-weight:700; color:var(--text-sub); text-transform:uppercase; display:block; margin-bottom:5px;">💰 Budget Tier</label>
-              <select id="agentBudget" onchange="runFetchingAgent()" style="width:100%; height:38px; background:rgba(10,15,26,0.9); border:1px solid rgba(255,255,255,0.15); border-radius:8px; color:#fff; padding:0 10px; font-size:13px;">
-                <option value="all" selected>All Budgets (AED 600K - 40M)</option>
-                <option value="luxury">Ultra Luxury (AED 5M+)</option>
-                <option value="mid">Mid-Market (AED 2M - 5M)</option>
-                <option value="entry">Entry & High-Yield (&lt; AED 2M)</option>
-              </select>
-            </div>
-          </div>
         </div>
 
-        <!-- Fresh Inquiries Grid -->
-        <div id="fetchingAgentGrid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(440px, 1fr)); gap: 20px;">
-          <!-- Populated dynamically -->
+        <!-- Query Input -->
+        <div class="input-group">
+          <label class="input-label">Google Search Query / Dork</label>
+          <input type="text" id="scraperQuery" class="text-input" value='site:reddit.com/r/dubairealestate "looking to buy" OR "budget"'>
+        </div>
+
+        <!-- Quick Presets -->
+        <div class="presets-bar">
+          <span style="font-size:12px; color:var(--text-sub); align-self:center;">Quick Dorks:</span>
+          <button class="preset-pill" onclick="setScrapePreset('site:reddit.com/r/dubairealestate \"looking to buy\"')">🔴 Reddit Buyer Queries</button>
+          <button class="preset-pill" onclick="setScrapePreset('site:britishexpats.com \"dubai\" \"buy property\"')">🇬🇧 British Expats Inquiries</button>
+          <button class="preset-pill" onclick="setScrapePreset('site:expatforum.com \"dubai\" \"looking to buy\"')">🌐 Expat Forum Buyers</button>
+          <button class="preset-pill" onclick="setScrapePreset('site:linkedin.com/posts \"looking to buy property in dubai\"')">💼 LinkedIn Real Estate Posts</button>
+          <button class="preset-pill" onclick="setScrapePreset('\"looking to buy\" \"dubai hills\" (\"villa\" OR \"apartment\")')">⛳ Dubai Hills Villa Queries</button>
         </div>
       </div>
 
-      <!-- Tab 2: Public Buyer Footprints (Google Dorks) View -->
-      <div id="dorkPostsTab" class="tab-content">
-        <div class="dork-header-banner">
+      <!-- Scraper Results -->
+      <div id="scraperLoading" style="display:none; text-align:center; padding:40px;">
+        <div class="spinner"></div>
+        <h4 style="font-size:15px; color:#fff; margin-bottom:4px;">Connecting to Live Search API...</h4>
+        <p style="font-size:13px; color:var(--text-muted);">Fetching genuine real-time organic search results from Google UAE.</p>
+      </div>
+
+      <div id="scraperEmptyState" style="text-align:center; padding:60px 20px; background:var(--card-bg); border:1px solid var(--card-border); border-radius:18px;">
+        <div style="font-size:36px; margin-bottom:12px;">🔑</div>
+        <h3 style="font-size:16px; color:#fff; margin-bottom:6px;">Ready for Live Web Searching</h3>
+        <p style="font-size:13px; color:var(--text-muted); max-width:520px; margin:0 auto 16px auto;">
+          Enter your free SerpApi Key above (or set <code>SERPAPI_KEY</code> on Vercel) and click <strong>Run Live Search</strong>. Only 100% genuine Google results will be returned.
+        </p>
+        <button class="btn-primary" onclick="window.open('https://serpapi.com', '_blank')">Get Free SerpApi Key (100 free searches)</button>
+      </div>
+
+      <div class="results-grid" id="scraperResultsGrid" style="display:none;">
+        <!-- Populated dynamically -->
+      </div>
+    </div>
+
+    <!-- TAB 2: Google Search Demand (Live Autocomplete) -->
+    <div id="googleDemandTab" class="tab-content">
+      <div class="panel">
+        <h2 style="font-size:17px; font-weight:700; color:#fff; margin-bottom:4px;">Live Google Search Demand (UAE Autocomplete)</h2>
+        <p style="font-size:13px; color:var(--text-muted); margin-bottom:16px;">
+          Pulls 100% real-time buyer search terms directly from Google Suggest API. Zero API key needed.
+        </p>
+
+        <div style="display:flex; gap:12px; margin-bottom:16px;">
+          <input type="text" id="demandKeyword" class="text-input" value="dubai hills villa buy" placeholder="Enter keyword to check Google search demand...">
+          <button class="btn-primary" onclick="fetchGoogleDemand()">Check Google Demand</button>
+        </div>
+
+        <div id="demandResults" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:16px;">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 3: Inbound Lead Webhook -->
+    <div id="inboundWebhookTab" class="tab-content">
+      <div class="panel">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:16px; flex-wrap:wrap; gap:12px;">
           <div>
-            <h3 style="font-size:16px; color:#fff; margin-bottom:4px;">🌐 Public Buyer Inquiries Indexed on Google</h3>
-            <p style="font-size:13px; color:var(--text-muted);">Real individuals who posted property purchase requests on forums, social media, and classifieds with contact details.</p>
+            <h2 style="font-size:17px; font-weight:700; color:#34d399; margin-bottom:4px;">Live Inbound Lead Webhook</h2>
+            <p style="font-size:13px; color:var(--text-muted);">Connect your Google Ads Lead Form assets, Meta Lead Ads, or website forms here to receive 100% real buyer leads.</p>
           </div>
-          <button class="btn-action highlight" onclick="runDorkMining()">🔄 Refresh Google Dorks</button>
+          <button class="btn-primary" onclick="fetchInboundLeads()">🔄 Refresh Leads</button>
         </div>
 
-        <div style="margin-bottom:12px; font-size:12px; font-weight:700; color:var(--text-sub); text-transform:uppercase;">
-          Active Google Dork Queries (Click to verify directly in Google):
-        </div>
-        <div class="dork-pills-list" id="dorkPillsList">
-          <!-- Populated dynamically -->
-        </div>
-
-        <div class="public-posts-grid" id="publicPostsGrid">
-          <!-- Populated dynamically -->
-        </div>
-      </div>
-
-      <!-- Tab 3: Google Search Demand View -->
-      <div id="searchDemandTab" class="tab-content">
-        <div class="demand-grid">
-          <div class="demand-col">
-            <h3 style="color: #34d399;">🟢 Ready to Buy (Transactional Queries)</h3>
-            <div id="demandTransactional"></div>
-          </div>
-          <div class="demand-col">
-            <h3 style="color: #60a5fa;">🔵 Evaluating Projects (Commercial Queries)</h3>
-            <div id="demandCommercial"></div>
-          </div>
-          <div class="demand-col">
-            <h3 style="color: #f59e0b;">🟠 Local & Urgency Searches</h3>
-            <div id="demandLocalized"></div>
-          </div>
-          <div class="demand-col">
-            <h3 style="color: #c084fc;">🟣 Buyer Questions & Visa Criteria</h3>
-            <div id="demandInformational"></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Tab 4: Developer Ads View -->
-      <div id="developerAdsTab" class="tab-content">
-        <div id="developerAdsList">
-          <!-- Populated dynamically -->
-        </div>
-      </div>
-
-      <!-- Tab 5: Live Inbound Webhook Leads View -->
-      <div id="inboundWebhookTab" class="tab-content">
-        <div style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 16px; padding: 20px; margin-bottom: 20px;">
-          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:12px;">
-            <div>
-              <h3 style="font-size:16px; color:#34d399; margin-bottom:4px; font-weight:700;">🟢 Live Real Lead Inbound Webhook</h3>
-              <p style="font-size:13px; color:var(--text-muted);">Connect your live Google Ads Lead Form assets, Meta Ads, or website forms here to receive 100% verified real leads in real time.</p>
-            </div>
-            <div style="display:flex; gap:10px;">
-              <button class="btn-action highlight" onclick="sendTestWebhookLead()" style="background:#10b981; color:#fff; border:none; padding:8px 16px; border-radius:8px; font-weight:600; cursor:pointer;">
-                ⚡ Send Test Real Lead
-              </button>
-              <button class="btn-action" onclick="fetchInboundLeads()" style="background:rgba(255,255,255,0.08); color:#fff; border:1px solid rgba(255,255,255,0.15); padding:8px 16px; border-radius:8px; font-weight:600; cursor:pointer;">
-                🔄 Refresh
-              </button>
-            </div>
-          </div>
-          <div style="display:flex; gap:10px; align-items:center; background: rgba(0,0,0,0.4); padding:10px 14px; border-radius:10px; border:1px solid rgba(255,255,255,0.1);">
-            <span style="font-size:12px; color:var(--text-sub); font-weight:700;">WEBHOOK ENDPOINT:</span>
-            <code id="webhookUrlText" style="color:#6ee7b7; font-family:'JetBrains Mono',monospace; font-size:13px; flex:1;">https://ai-buyer-kappa.vercel.app/api/webhook</code>
-            <button onclick="navigator.clipboard.writeText('https://ai-buyer-kappa.vercel.app/api/webhook'); showToast('Copied Webhook URL!');" style="background:rgba(255,255,255,0.1); border:none; color:#fff; padding:5px 12px; border-radius:6px; cursor:pointer; font-size:12px;">📋 Copy URL</button>
-          </div>
+        <div style="display:flex; gap:10px; align-items:center; background:rgba(0,0,0,0.4); padding:10px 14px; border-radius:10px; border:1px solid rgba(255,255,255,0.1); margin-bottom:18px;">
+          <span style="font-size:12px; color:var(--text-sub); font-weight:700;">WEBHOOK ENDPOINT:</span>
+          <code id="webhookUrlText" style="color:#6ee7b7; font-family:'JetBrains Mono',monospace; font-size:13px; flex:1;">https://ai-buyer-kappa.vercel.app/api/webhook</code>
+          <button onclick="navigator.clipboard.writeText('https://ai-buyer-kappa.vercel.app/api/webhook'); showToast('Copied Webhook URL!');" style="background:rgba(255,255,255,0.1); border:none; color:#fff; padding:5px 12px; border-radius:6px; cursor:pointer; font-size:12px;">📋 Copy URL</button>
         </div>
 
-        <div id="inboundLeadsGrid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(420px, 1fr)); gap: 20px;">
+        <div id="inboundLeadsList" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(400px, 1fr)); gap:16px;">
           <!-- Populated dynamically -->
         </div>
       </div>
@@ -912,15 +451,7 @@
   <div class="toast" id="toast"></div>
 
   <script>
-    let currentData = null;
-    let currentDorkData = null;
-
-    function setQuickPreset(comm, ptype) {
-      document.getElementById('selCommunity').value = comm;
-      document.getElementById('selPropertyType').value = ptype;
-      runMining();
-    }
-
+    // Tab Switching
     function switchTab(tabId, btn) {
       document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
       document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
@@ -931,519 +462,237 @@
     function showToast(msg) {
       const toast = document.getElementById('toast');
       toast.innerText = msg;
-      toast.style.display = 'flex';
+      toast.style.display = 'block';
       setTimeout(() => { toast.style.display = 'none'; }, 3000);
     }
 
-    async function runMining() {
-      const community = document.getElementById('selCommunity').value;
-      const property_type = document.getElementById('selPropertyType').value;
-      const max_enquiries = document.getElementById('selCount').value;
+    // Local Storage for API Keys
+    function saveApiKey() {
+      const provider = document.getElementById('scraperProvider').value;
+      const key = document.getElementById('scraperApiKey').value;
+      localStorage.setItem(`ai_buyer_${provider}_key`, key);
+    }
 
-      const loader = document.getElementById('loaderWrap');
-      loader.style.display = 'block';
+    function loadApiKey() {
+      const provider = document.getElementById('scraperProvider').value;
+      const saved = localStorage.getItem(`ai_buyer_${provider}_key`);
+      if (saved) document.getElementById('scraperApiKey').value = saved;
+    }
+
+    function updateProviderHint() {
+      loadApiKey();
+    }
+
+    function setScrapePreset(dork) {
+      document.getElementById('scraperQuery').value = dork;
+      executeLiveScrape();
+    }
+
+    // Execute Live Scrape via SerpApi / Apify
+    async function executeLiveScrape() {
+      const provider = document.getElementById('scraperProvider').value;
+      const apiKey = document.getElementById('scraperApiKey').value.trim();
+      const query = document.getElementById('scraperQuery').value.trim();
+
+      const loading = document.getElementById('scraperLoading');
+      const emptyState = document.getElementById('scraperEmptyState');
+      const resultsGrid = document.getElementById('scraperResultsGrid');
+
+      loading.style.display = 'block';
+      emptyState.style.display = 'none';
+      resultsGrid.style.display = 'none';
 
       try {
-        const resp = await fetch('/api/enquiries', {
+        const resp = await fetch('/api/live-scraper', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ community, property_type, max_enquiries })
+          body: JSON.stringify({ provider, api_key: apiKey, query })
         });
         const data = await resp.json();
-        currentData = data;
-        renderEnquiryDashboard(data);
-      } catch (err) {
-        alert("Mining failed: " + err.message);
-      } finally {
-        loader.style.display = 'none';
-      }
-    }
 
-    async function runDorkMining() {
-      const community = document.getElementById('selCommunity').value;
-      try {
-        const resp = await fetch('/api/dork-miner', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ community, platform: 'all' })
-        });
-        const data = await resp.json();
-        currentDorkData = data;
-        renderDorkPosts(data);
-      } catch (err) {
-        console.error("Dork miner error:", err);
-      }
-    }
+        loading.style.display = 'none';
 
-    function renderDorkPosts(data) {
-      const dorks = data.active_google_dorks || [];
-      const posts = data.public_buyer_posts || [];
-
-      document.getElementById('dorkCount').innerText = posts.length;
-
-      // Render Dork Links
-      const pillsContainer = document.getElementById('dorkPillsList');
-      pillsContainer.innerHTML = '';
-      dorks.forEach(d => {
-        const a = document.createElement('a');
-        a.className = 'dork-tag';
-        a.href = d.google_search_link;
-        a.target = '_blank';
-        a.innerHTML = `🔍 <span>${d.dork_query}</span> ↗`;
-        pillsContainer.appendChild(a);
-      });
-
-      // Render Posts Grid
-      const postsGrid = document.getElementById('publicPostsGrid');
-      postsGrid.innerHTML = '';
-      posts.forEach((post, idx) => {
-        const card = document.createElement('div');
-        card.className = 'post-card';
-        const primaryPhone = post.detected_phones[0] || '';
-        const primaryEmail = post.detected_emails[0] || '';
-        const isDemo = post.is_sample_demo !== false;
-
-        const statusBadge = isDemo
-          ? `<span style="background:rgba(245,158,11,0.15); border:1px solid rgba(245,158,11,0.4); color:#fbbf24; padding:3px 8px; border-radius:6px; font-size:10px; font-weight:700;">🔬 DEMO TEMPLATE</span>`
-          : `<span style="background:rgba(16,185,129,0.2); border:1px solid #10b981; color:#6ee7b7; padding:3px 8px; border-radius:6px; font-size:10px; font-weight:700;">⚡ LIVE RESULT</span>`;
-
-        const phoneLabel = isDemo ? "📱 Demo Phone:" : "📞 Extracted Phone:";
-        const emailLabel = isDemo ? "✉️ Demo Email:" : "✉️ Extracted Email:";
-
-        card.innerHTML = `
-          <div>
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-              <span class="post-platform-badge">${post.platform_icon} ${post.platform}</span>
-              ${statusBadge}
-            </div>
-            <h4 style="font-size:16px; color:#fff; font-weight:700; margin-bottom:4px;">${post.title}</h4>
-            <div style="font-size:12px; color:var(--text-muted); margin-bottom:10px;">Posted by: <strong>${post.author}</strong> • Area: <span style="color:#6ee7b7;">${post.area}</span> (${post.budget_display})</div>
-
-            <div class="post-snippet">
-              "${post.snippet}"
-            </div>
-
-            <div class="contact-highlight-box">
-              <div class="contact-highlight-item">
-                <span>${phoneLabel}</span>
-                <strong style="color:#fff;">${primaryPhone || 'Inquire on platform'}</strong>
-              </div>
-              ${primaryEmail ? `
-              <div class="contact-highlight-item">
-                <span>${emailLabel}</span>
-                <strong style="color:#fff;">${primaryEmail}</strong>
-              </div>` : ''}
-              ${isDemo ? `<div style="font-size:11px; color:#9ca3af; margin-top:2px;">(Simulated contact schema • click "Search on Google" for live posts)</div>` : ''}
-            </div>
-          </div>
-
-          <div class="card-footer">
-            ${post.whatsapp_link ? `
-            <a href="${post.whatsapp_link}" target="_blank" class="btn-wa-direct">
-              💬 Direct WhatsApp
-            </a>` : ''}
-            <a href="${post.source_url}" target="_blank" class="btn-desk-push" style="text-decoration:none; color:#60a5fa;">
-              🔍 Search on Google
-            </a>
-            <button class="btn-desk-push" onclick="copyContact('${post.author}', '${primaryPhone}', '${primaryEmail}')">
-              📋 Copy
-            </button>
-          </div>
-        `;
-        postsGrid.appendChild(card);
-      });
-    }
-
-    function copyContact(author, phone, email) {
-      const text = `Public Inquirer: ${author}\nPhone: ${phone}\nEmail: ${email}`;
-      navigator.clipboard.writeText(text);
-      showToast(`Copied ${author}'s contact info!`);
-    }
-
-    function renderEnquiryDashboard(data) {
-      const enquiries = data.buyer_enquiries || [];
-      const demand = data.buyer_demand || {};
-      const byIntent = demand.by_intent || {};
-
-      document.getElementById('enquiryCount').innerText = enquiries.length;
-      document.getElementById('demandCount').innerText = demand.total_buyer_queries_found || 0;
-      document.getElementById('adsCount').innerText = (data.developer_ads || []).length;
-
-      // 1. Render Enquiries Grid
-      const grid = document.getElementById('enquiriesGrid');
-      grid.innerHTML = '';
-      enquiries.forEach((enq, idx) => {
-        const scoreClass = enq.score === 'High' ? 'score-high' : 'score-med';
-        const card = document.createElement('div');
-        card.className = 'enquiry-card';
-        card.innerHTML = `
-          <div>
-            <div class="card-top-row">
-              <div class="card-title-group">
-                <h3>${enq.title}</h3>
-                <span class="buyer-name-sub">Buyer: <strong>${enq.buyer_name}</strong></span>
-              </div>
-              <span class="score-badge ${scoreClass}">${enq.score} Score</span>
-            </div>
-
-            <div class="data-matrix">
-              <div class="matrix-item">
-                <span class="matrix-lbl">Phone (UAE)</span>
-                <span class="matrix-val" id="phone_${idx}">
-                  ${enq.phone_masked}
-                  <button class="phone-unmask-btn" onclick="revealPhone('${idx}', '${enq.phone}')">Reveal</button>
-                </span>
-              </div>
-              <div class="matrix-item">
-                <span class="matrix-lbl">Email</span>
-                <span class="matrix-val" title="${enq.email}">${enq.email}</span>
-              </div>
-              <div class="matrix-item">
-                <span class="matrix-lbl">Budget (AED)</span>
-                <span class="matrix-val highlight">${enq.budget_display}</span>
-              </div>
-              <div class="matrix-item">
-                <span class="matrix-lbl">Area</span>
-                <span class="matrix-val">${enq.area}</span>
-              </div>
-              <div class="matrix-item">
-                <span class="matrix-lbl">Financing</span>
-                <span class="matrix-val">${enq.financing}</span>
-              </div>
-              <div class="matrix-item">
-                <span class="matrix-lbl">Timeline</span>
-                <span class="matrix-val">${enq.timeline}</span>
-              </div>
-            </div>
-
-            <div class="notes-box">
-              <strong>Buyer Inquiry Notes:</strong>
-              ${enq.notes}
-            </div>
-          </div>
-
-          <div class="card-footer">
-            <a href="${enq.whatsapp_link}" target="_blank" class="btn-wa-direct">
-              💬 WhatsApp Chat
-            </a>
-            <button class="btn-desk-push" onclick="copyLead(${idx})">
-              📋 Copy Lead
-            </button>
-          </div>
-        `;
-        grid.appendChild(card);
-      });
-
-      // 2. Render Google Search Demand
-      renderDemandList('demandTransactional', byIntent['Transactional (Ready to Buy)'] || []);
-      renderDemandList('demandCommercial', byIntent['Commercial Investigation (Evaluating Options)'] || []);
-      renderDemandList('demandLocalized', byIntent['Localized High-Intent'] || []);
-      renderDemandList('demandInformational', byIntent['Informational (Awareness)'] || []);
-
-      // 3. Render Developer Ads
-      const adsList = document.getElementById('developerAdsList');
-      adsList.innerHTML = '';
-      (data.developer_ads || []).forEach(ad => {
-        const adEl = document.createElement('div');
-        adEl.className = 'ad-card-item';
-        adEl.innerHTML = `
-          <div style="display:flex; align-items:center; margin-bottom:8px;">
-            <span class="sp-tag">Google Sponsored Ad</span>
-            <span style="font-size:12px; color:var(--text-muted);">${ad.developer} (${ad.display_url})</span>
-          </div>
-          <h4 style="font-size:16px; color:#93c5fd; margin-bottom:6px;">${ad.headline}</h4>
-          <p style="font-size:13px; color:#d1d5db; margin-bottom:8px;">${ad.description}</p>
-        `;
-        adsList.appendChild(adEl);
-      });
-    }
-
-    function renderDemandList(containerId, queries) {
-      const container = document.getElementById(containerId);
-      container.innerHTML = '';
-      if (!queries || queries.length === 0) {
-        container.innerHTML = '<p style="font-size: 12px; color: var(--text-sub);">No queries in this category.</p>';
-        return;
-      }
-      queries.forEach(q => {
-        const el = document.createElement('div');
-        el.className = 'query-item';
-        el.innerHTML = `<span>${q}</span><button style="background:none; border:none; cursor:pointer;" onclick="navigator.clipboard.writeText('${q}'); showToast('Copied search query!');">📋</button>`;
-        container.appendChild(el);
-      });
-    }
-
-    function revealPhone(idx, fullPhone) {
-      document.getElementById(`phone_${idx}`).innerHTML = `<a href="tel:${fullPhone}" style="color:#34d399; text-decoration:none;">${fullPhone}</a>`;
-    }
-
-    function copyLead(idx) {
-      const enq = currentData.buyer_enquiries[idx];
-      const text = `Title: ${enq.title}\nBuyer: ${enq.buyer_name}\nPhone: ${enq.phone}\nEmail: ${enq.email}\nBudget: ${enq.budget_display}\nArea: ${enq.area}\nFinancing: ${enq.financing}\nTimeline: ${enq.timeline}\nNotes: ${enq.notes}`;
-      navigator.clipboard.writeText(text);
-      showToast(`Copied ${enq.buyer_name} enquiry to clipboard!`);
-    }
-
-    async function exportEnquiriesCSV() {
-      if (!currentData || !currentData.buyer_enquiries) return;
-      try {
-        const resp = await fetch('/api/export', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ enquiries: currentData.buyer_enquiries })
-        });
-        const blob = await resp.blob();
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `ai_buyer_realestate_leads.csv`;
-        a.click();
-        showToast("Exported CSV successfully!");
-      } catch (e) {
-        alert("Export failed: " + e.message);
-      }
-    }
-
-    function exportEnquiriesJSON() {
-      if (!currentData) return;
-      const blob = new Blob([JSON.stringify(currentData, null, 2)], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `ai_buyer_dossier.json`;
-      a.click();
-      showToast("Exported JSON successfully!");
-    }
-
-    // Inbound Real Webhook Lead Handlers
-    async function fetchInboundLeads() {
-      try {
-        const res = await fetch('/api/webhook');
-        const data = await res.json();
-        const leads = data.leads || [];
-        document.getElementById('webhookCount').innerText = leads.length;
-        renderInboundLeads(leads);
-      } catch(e) {
-        console.error("Failed to fetch inbound leads:", e);
-      }
-    }
-
-    async function sendTestWebhookLead() {
-      const dummyLead = {
-        name: "Dr. Hamdan Al-Falasi",
-        phone: "+971 50 829 4410",
-        email: "h.alfalasi.invest@gmail.com",
-        budget: "AED 14.5M",
-        community: "Palm Jumeirah",
-        property_type: "Beachfront Villa",
-        source: "Google Ads Lead Form Asset",
-        notes: "Interested in 4BR direct beach access villa. Cash purchase ready for transfer, Golden Visa requested."
-      };
-      try {
-        showToast("Submitting live lead to webhook...");
-        await fetch('/api/webhook', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(dummyLead)
-        });
-        showToast("Real Lead captured successfully into dashboard!");
-        fetchInboundLeads();
-      } catch(e) {
-        alert("Webhook test failed: " + e.message);
-      }
-    }
-
-    function renderInboundLeads(leads) {
-      const grid = document.getElementById('inboundLeadsGrid');
-      if (!grid) return;
-      grid.innerHTML = '';
-      if (leads.length === 0) {
-        grid.innerHTML = `
-          <div style="grid-column: 1/-1; text-align:center; padding:50px 20px; background:var(--card-bg); border:1px solid var(--card-border); border-radius:18px;">
-            <div style="font-size:36px; margin-bottom:12px;">📡</div>
-            <h4 style="font-size:16px; color:#fff; margin-bottom:6px;">No Inbound Leads Captured Yet</h4>
-            <p style="font-size:13px; color:var(--text-muted); max-width:480px; margin:0 auto 16px auto;">Connect your Google Ads or landing page to the webhook endpoint, or click the button below to test live capture.</p>
-            <button onclick="sendTestWebhookLead()" class="btn-mine" style="height:42px; padding:0 22px; margin:0 auto; cursor:pointer;">⚡ Click to Send Test Real Lead</button>
-          </div>
-        `;
-        return;
-      }
-
-      leads.forEach(lead => {
-        const card = document.createElement('div');
-        card.className = 'post-card';
-        card.style.borderColor = 'rgba(16, 185, 129, 0.45)';
-        card.innerHTML = `
-          <div>
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-              <span style="background:rgba(16,185,129,0.2); border:1px solid #10b981; color:#6ee7b7; padding:3px 10px; border-radius:6px; font-size:11px; font-weight:700;">✅ VERIFIED REAL INBOUND BUYER</span>
-              <span style="font-size:11px; color:var(--text-sub);">${new Date(lead.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
-            </div>
-            <h4 style="font-size:17px; color:#fff; font-weight:700; margin-bottom:4px;">${lead.name}</h4>
-            <div style="font-size:12px; color:var(--text-muted); margin-bottom:10px;">
-              Source: <strong style="color:#60a5fa;">${lead.source}</strong> • Area: <span style="color:#6ee7b7;">${lead.community}</span> • Budget: <strong>${lead.budget}</strong>
-            </div>
-            <div class="post-snippet" style="border-left-color: #10b981;">
-              "${lead.notes}"
-            </div>
-            <div class="contact-highlight-box" style="background: rgba(16,185,129,0.12); border-color:#10b981;">
-              <div class="contact-highlight-item">
-                <span>📞 Verified Phone:</span>
-                <strong style="color:#fff;"><a href="tel:${lead.phone}" style="color:#34d399; text-decoration:none;">${lead.phone}</a></strong>
-              </div>
-              ${lead.email ? `
-              <div class="contact-highlight-item">
-                <span>✉️ Verified Email:</span>
-                <strong style="color:#fff;">${lead.email}</strong>
-              </div>` : ''}
-            </div>
-          </div>
-          <div class="card-footer">
-            ${lead.whatsapp_link ? `
-            <a href="${lead.whatsapp_link}" target="_blank" class="btn-wa-direct">
-              💬 Direct WhatsApp
-            </a>` : ''}
-            <a href="tel:${lead.phone}" class="btn-desk-push" style="color:#6ee7b7; text-decoration:none;">
-              📞 Direct Call
-            </a>
-            <button class="btn-desk-push" onclick="copyContact('${lead.name}', '${lead.phone}', '${lead.email}')">
-              📋 Copy
-            </button>
-          </div>
-        `;
-        grid.appendChild(card);
-      });
-    }
-
-    // Run automatically on load
-    window.addEventListener('DOMContentLoaded', () => {
-      runMining();
-      runDorkMining();
-      fetchInboundLeads();
-      runFetchingAgent();
-    });
-
-    // Multi-Source AI Fetching Agent Functions
-    async function runFetchingAgent() {
-      const time_range = document.getElementById('agentTimeRange')?.value || '7d';
-      const source = document.getElementById('agentSource')?.value || 'all';
-      const budget_tier = document.getElementById('agentBudget')?.value || 'all';
-      const community = document.getElementById('selCommunity')?.value || 'All';
-
-      const grid = document.getElementById('fetchingAgentGrid');
-      if (grid) {
-        grid.innerHTML = `
-          <div style="grid-column: 1/-1; text-align:center; padding:50px 20px; background:var(--card-bg); border:1px solid var(--card-border); border-radius:18px;">
-            <div class="spinner" style="margin: 0 auto 16px auto;"></div>
-            <h4 style="font-size:16px; color:#fff; margin-bottom:6px;">Crawling Multi-Source Platforms...</h4>
-            <p style="font-size:13px; color:var(--text-muted);">Scanning Reddit r/dubairealestate, British Expats, LinkedIn & Google SERPs with &lt;= ${time_range} freshness filter</p>
-          </div>
-        `;
-      }
-
-      try {
-        const resp = await fetch('/api/fetching-agent', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ time_range, source, budget_tier, community })
-        });
-        const data = await resp.json();
-        const inquiries = data.fresh_buyer_inquiries || [];
-        const countBadge = document.getElementById('fetchingCount');
-        if (countBadge) countBadge.innerText = inquiries.length;
-        renderFetchingAgentCards(inquiries);
-      } catch(e) {
-        console.error("Fetching agent error:", e);
-        if (grid) {
-          grid.innerHTML = `<p style="color:#ef4444; grid-column:1/-1;">Error running agent: ${e.message}</p>`;
+        if (data.status === 'needs_key') {
+          emptyState.style.display = 'block';
+          emptyState.innerHTML = `
+            <div style="font-size:36px; margin-bottom:12px;">🔑</div>
+            <h3 style="font-size:16px; color:#fff; margin-bottom:6px;">API Key Required for Live Google Scraping</h3>
+            <p style="font-size:13px; color:var(--text-muted); max-width:520px; margin:0 auto 16px auto;">${data.message}</p>
+            <button class="btn-primary" onclick="window.open('${data.free_signup_url}', '_blank')">Get Free ${provider === 'apify' ? 'Apify Token' : 'SerpApi Key'}</button>
+          `;
+          return;
         }
-      }
-    }
 
-    function renderFetchingAgentCards(items) {
-      const grid = document.getElementById('fetchingAgentGrid');
-      if (!grid) return;
-      grid.innerHTML = '';
+        if (data.status === 'error') {
+          emptyState.style.display = 'block';
+          emptyState.innerHTML = `
+            <div style="font-size:36px; margin-bottom:12px;">⚠️</div>
+            <h3 style="font-size:16px; color:#ef4444; margin-bottom:6px;">Search Query Error</h3>
+            <p style="font-size:13px; color:var(--text-muted); max-width:520px; margin:0 auto;">${data.error}</p>
+          `;
+          return;
+        }
 
-      if (items.length === 0) {
-        grid.innerHTML = `
-          <div style="grid-column: 1/-1; text-align:center; padding:50px 20px; background:var(--card-bg); border:1px solid var(--card-border); border-radius:18px;">
-            <div style="font-size:32px; margin-bottom:12px;">🔍</div>
-            <h4 style="font-size:16px; color:#fff; margin-bottom:6px;">No Inquiries Match This Filter Window</h4>
-            <p style="font-size:13px; color:var(--text-muted); max-width:440px; margin:0 auto;">Try expanding the time range to 'Past 7 Days' or selecting 'All Sources'.</p>
-          </div>
-        `;
-        return;
-      }
+        const items = data.results || [];
+        document.getElementById('scraperCount').innerText = items.length;
 
-      items.forEach(item => {
-        const card = document.createElement('div');
-        card.className = 'post-card';
-        card.style.borderColor = 'rgba(139, 92, 246, 0.4)';
+        if (items.length === 0) {
+          emptyState.style.display = 'block';
+          emptyState.innerHTML = `
+            <div style="font-size:36px; margin-bottom:12px;">📭</div>
+            <h3 style="font-size:16px; color:#fff; margin-bottom:6px;">No Live Search Results Returned</h3>
+            <p style="font-size:13px; color:var(--text-muted); max-width:520px; margin:0 auto;">Google found 0 organic results matching this query. Try adjusting your search query.</p>
+          `;
+          return;
+        }
 
-        card.innerHTML = `
-          <div>
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; flex-wrap:wrap; gap:6px;">
-              <span class="post-platform-badge" style="background:rgba(139,92,246,0.15); border-color:rgba(139,92,246,0.35); color:#c4b5fd;">
-                ${item.platform_icon} ${item.source_platform}
-              </span>
-              <span style="display:inline-flex; align-items:center; gap:5px; background:rgba(16,185,129,0.15); border:1px solid #10b981; color:#6ee7b7; padding:2px 8px; border-radius:6px; font-size:11px; font-weight:700;">
-                <span style="width:6px; height:6px; background:#10b981; border-radius:50%; display:inline-block;"></span>
-                ${item.date_posted_relative}
-              </span>
-            </div>
-
-            <h4 style="font-size:16px; color:#fff; font-weight:700; margin-bottom:6px; line-height:1.4;">${item.title}</h4>
-
-            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap:8px; margin-bottom:12px; background:rgba(0,0,0,0.25); padding:10px 12px; border-radius:8px; border:1px solid rgba(255,255,255,0.05); font-size:12px;">
-              <div><span style="color:var(--text-sub); display:block; font-size:10px; text-transform:uppercase;">Stated Budget</span><strong style="color:#6ee7b7; font-size:13px;">${item.budget_display}</strong></div>
-              <div><span style="color:var(--text-sub); display:block; font-size:10px; text-transform:uppercase;">Area Focus</span><strong style="color:#93c5fd;">${item.area}</strong></div>
-              <div><span style="color:var(--text-sub); display:block; font-size:10px; text-transform:uppercase;">Buyer Intent</span><strong style="color:#c084fc;">${item.intent_score}% Direct</strong></div>
-              <div><span style="color:var(--text-sub); display:block; font-size:10px; text-transform:uppercase;">Financing</span><strong style="color:#fde047;">${item.financing.split(' ')[0]} ${item.financing.split(' ')[1] || ''}</strong></div>
-            </div>
-
-            <div class="post-snippet" style="border-left-color: #8b5cf6;">
-              "${item.snippet}"
-            </div>
-
-            <div class="contact-highlight-box" style="background:rgba(139,92,246,0.08); border-color:rgba(139,92,246,0.25);">
-              <div class="contact-highlight-item" style="color:#c4b5fd;">
-                <span>👤 Poster / Profile:</span>
-                <strong style="color:#fff;"><a href="${item.profile_url}" target="_blank" style="color:#c4b5fd; text-decoration:none;">${item.author_username} ↗</a></strong>
+        // Render genuine live items
+        resultsGrid.innerHTML = '';
+        items.forEach(item => {
+          const card = document.createElement('div');
+          card.className = 'result-card';
+          card.innerHTML = `
+            <div>
+              <div style="font-size:11px; color:#60a5fa; font-weight:700; margin-bottom:6px; word-break:break-all;">
+                🌐 ${item.displayed_link}
               </div>
-              ${item.detected_phone ? `
-              <div class="contact-highlight-item">
-                <span>📞 Public Phone:</span>
-                <strong style="color:#34d399;"><a href="tel:${item.detected_phone}" style="color:#34d399; text-decoration:none;">${item.detected_phone}</a></strong>
+              <h3 class="result-card-title">
+                <a href="${item.link}" target="_blank">${item.title} ↗</a>
+              </h3>
+              <div class="result-card-snippet">
+                "${item.snippet}"
+              </div>
+              ${item.detected_phones.length > 0 ? `
+              <div style="background:rgba(16,185,129,0.1); border:1px solid #10b981; padding:8px 12px; border-radius:8px; margin-bottom:12px; font-size:12px; color:#34d399;">
+                📞 Detected Phone: <strong>${item.detected_phones.join(', ')}</strong>
               </div>` : ''}
-              ${item.detected_email ? `
-              <div class="contact-highlight-item">
-                <span>✉️ Public Email:</span>
-                <strong style="color:#fff;">${item.detected_email}</strong>
+              ${item.detected_emails.length > 0 ? `
+              <div style="background:rgba(59,130,246,0.1); border:1px solid #3b82f6; padding:8px 12px; border-radius:8px; margin-bottom:12px; font-size:12px; color:#93c5fd;">
+                ✉️ Detected Email: <strong>${item.detected_emails.join(', ')}</strong>
               </div>` : ''}
             </div>
-          </div>
+            <div class="result-card-footer">
+              ${item.whatsapp_link ? `
+              <a href="${item.whatsapp_link}" target="_blank" class="btn-primary" style="height:36px; font-size:12px; padding:0 14px; text-decoration:none;">
+                💬 WhatsApp
+              </a>` : ''}
+              <a href="${item.link}" target="_blank" style="color:#60a5fa; font-size:12px; text-decoration:none;">
+                Open Live Thread ↗
+              </a>
+            </div>
+          `;
+          resultsGrid.appendChild(card);
+        });
 
-          <div class="card-footer" style="flex-wrap:wrap; gap:8px;">
-            ${item.whatsapp_link ? `
-            <a href="${item.whatsapp_link}" target="_blank" class="btn-wa-direct" style="background:linear-gradient(135deg, #10b981, #059669);">
-              💬 WhatsApp (${item.detected_phone})
-            </a>` : ''}
-            <a href="${item.dm_link}" target="_blank" class="btn-desk-push" style="background:rgba(139,92,246,0.2); border-color:rgba(139,92,246,0.5); color:#ddd6fe; text-decoration:none;">
-              ✉️ Send Direct Message (DM)
-            </a>
-            <button class="btn-desk-push" onclick="navigator.clipboard.writeText('${item.outreach_pitch.replace(/'/g, "\\'")}'); showToast('Copied personalized pitch!');">
-              📋 Copy Pitch
-            </button>
-            <a href="${item.source_url}" target="_blank" class="btn-desk-push" style="color:#93c5fd; text-decoration:none;">
-              🔗 View Thread
-            </a>
-          </div>
-        `;
+        resultsGrid.style.display = 'grid';
 
-        grid.appendChild(card);
-      });
+      } catch (err) {
+        loading.style.display = 'none';
+        emptyState.style.display = 'block';
+        emptyState.innerHTML = `<p style="color:#ef4444;">Failed to execute search: ${err.message}</p>`;
+      }
     }
+
+    // Google Live Demand Autocomplete
+    async function fetchGoogleDemand() {
+      const kw = document.getElementById('demandKeyword').value.trim();
+      const container = document.getElementById('demandResults');
+      container.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:20px;"><div class="spinner"></div></div>';
+
+      try {
+        const resp = await fetch(`/api/search-demand?q=${encodeURIComponent(kw)}`);
+        const data = await resp.json();
+        const queries = data.queries || [];
+
+        container.innerHTML = '';
+        if (queries.length === 0) {
+          container.innerHTML = '<p style="color:var(--text-sub); grid-column:1/-1;">No search queries returned.</p>';
+          return;
+        }
+
+        queries.forEach(q => {
+          const div = document.createElement('div');
+          div.style.background = 'rgba(255,255,255,0.03)';
+          div.style.border = '1px solid rgba(255,255,255,0.08)';
+          div.style.padding = '12px 16px';
+          div.style.borderRadius = '10px';
+          div.style.display = 'flex';
+          div.style.justifyContent = 'space-between';
+          div.style.alignItems = 'center';
+          div.innerHTML = `
+            <span style="font-size:13px; color:#fff;">${q}</span>
+            <button onclick="navigator.clipboard.writeText('${q}'); showToast('Copied query!');" style="background:none; border:none; cursor:pointer; color:var(--text-sub);">📋</button>
+          `;
+          container.appendChild(div);
+        });
+      } catch (e) {
+        container.innerHTML = `<p style="color:#ef4444; grid-column:1/-1;">Error fetching demand: ${e.message}</p>`;
+      }
+    }
+
+    // Inbound Real Webhook Leads
+    async function fetchInboundLeads() {
+      const container = document.getElementById('inboundLeadsList');
+      try {
+        const resp = await fetch('/api/webhook');
+        const data = await resp.json();
+        const leads = data.leads || [];
+
+        document.getElementById('webhookCount').innerText = leads.length;
+        container.innerHTML = '';
+
+        if (leads.length === 0) {
+          container.innerHTML = `
+            <div style="grid-column:1/-1; text-align:center; padding:50px 20px; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.06); border-radius:14px;">
+              <div style="font-size:32px; margin-bottom:10px;">📡</div>
+              <h4 style="font-size:15px; color:#fff; margin-bottom:4px;">No Inbound Leads Received Yet</h4>
+              <p style="font-size:13px; color:var(--text-muted); max-width:440px; margin:0 auto;">
+                Connect your Google Ads or landing page forms to the webhook URL above. When real buyers submit their contact info, they appear here instantly.
+              </p>
+            </div>
+          `;
+          return;
+        }
+
+        leads.forEach(lead => {
+          const div = document.createElement('div');
+          div.className = 'result-card';
+          div.style.borderColor = 'rgba(16,185,129,0.3)';
+          div.innerHTML = `
+            <div>
+              <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
+                <span style="font-size:11px; font-weight:700; color:#34d399;">✅ VERIFIED INBOUND BUYER</span>
+                <span style="font-size:11px; color:var(--text-sub);">${new Date(lead.created_at).toLocaleTimeString()}</span>
+              </div>
+              <h3 style="font-size:16px; color:#fff; font-weight:700; margin-bottom:4px;">${lead.name}</h3>
+              <p style="font-size:12px; color:var(--text-muted); margin-bottom:10px;">
+                Phone: <strong style="color:#fff;">${lead.phone}</strong> • Area: <strong>${lead.community}</strong>
+              </p>
+              ${lead.notes ? `<div class="result-card-snippet" style="border-left-color:#10b981;">"${lead.notes}"</div>` : ''}
+            </div>
+            <div class="result-card-footer">
+              ${lead.whatsapp_link ? `
+              <a href="${lead.whatsapp_link}" target="_blank" class="btn-primary" style="height:36px; font-size:12px; padding:0 14px; text-decoration:none;">
+                💬 WhatsApp Buyer
+              </a>` : ''}
+              <a href="tel:${lead.phone}" style="color:#34d399; font-size:12px; text-decoration:none;">
+                📞 Call Direct
+              </a>
+            </div>
+          `;
+          container.appendChild(div);
+        });
+      } catch (e) {
+        console.error("Error fetching leads:", e);
+      }
+    }
+
+    // Initialize on load
+    window.addEventListener('DOMContentLoaded', () => {
+      loadApiKey();
+      fetchGoogleDemand();
+      fetchInboundLeads();
+    });
   </script>
 </body>
 </html>
