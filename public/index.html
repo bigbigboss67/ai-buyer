@@ -724,6 +724,10 @@
             <span>📋 Real Estate Buyer Enquiries</span>
             <span class="tab-counter" id="enquiryCount">0</span>
           </button>
+          <button class="tab-btn" onclick="switchTab('fetchingAgentTab', this); runFetchingAgent();" style="border-bottom: 2px solid transparent;">
+            <span style="color:#c4b5fd;">🤖 AI Fetching Agent (Multi-Source Live)</span>
+            <span class="tab-counter" id="fetchingCount" style="background:#8b5cf6; color:#fff;">8</span>
+          </button>
           <button class="tab-btn" onclick="switchTab('dorkPostsTab', this); runDorkMining();">
             <span>🌐 Public Buyer Footprints (Google Dorks)</span>
             <span class="tab-counter" id="dorkCount" style="background:#3b82f6; color:#fff;">6</span>
@@ -751,6 +755,74 @@
       <!-- Tab 1: Real Estate Buyer Enquiries View -->
       <div id="enquiriesTab" class="tab-content active">
         <div class="enquiries-grid" id="enquiriesGrid">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+
+      <!-- Tab 6: Multi-Source AI Fetching Agent View -->
+      <div id="fetchingAgentTab" class="tab-content">
+        <div style="background: rgba(139, 92, 246, 0.08); border: 1px solid rgba(139, 92, 246, 0.25); border-radius: 18px; padding: 22px; margin-bottom: 22px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:16px;">
+            <div>
+              <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
+                <span style="font-size:18px;">🤖</span>
+                <h3 style="font-size:17px; color:#c4b5fd; font-weight:700;">Multi-Source AI Fetching Agent</h3>
+                <span style="background:rgba(16,185,129,0.2); border:1px solid #10b981; color:#6ee7b7; padding:2px 8px; border-radius:12px; font-size:11px; font-weight:700;">● LIVE RECENCY FILTER</span>
+              </div>
+              <p style="font-size:13px; color:var(--text-muted); max-width:650px;">
+                Continuously crawls multiple platforms (Reddit, British Expats, ExpatForum, LinkedIn, Facebook Groups, and Google SERPs) extracting fresh property inquiries posted within your chosen time horizon.
+              </p>
+            </div>
+            <button class="btn-action highlight" onclick="runFetchingAgent()" style="background:linear-gradient(135deg, #8b5cf6, #6d28d9); color:#fff; border:none; padding:10px 20px; border-radius:10px; font-weight:700; cursor:pointer; box-shadow:0 4px 15px rgba(139,92,246,0.3);">
+              🚀 Run Multi-Source Scan
+            </button>
+          </div>
+
+          <!-- Active Multi-Source Badges -->
+          <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:18px;">
+            <span style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); padding:4px 10px; border-radius:8px; font-size:11px; color:#d1d5db;">🔴 Reddit (r/dubairealestate)</span>
+            <span style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); padding:4px 10px; border-radius:8px; font-size:11px; color:#d1d5db;">🇬🇧 BritishExpats UAE</span>
+            <span style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); padding:4px 10px; border-radius:8px; font-size:11px; color:#d1d5db;">🌐 ExpatForum Dubai</span>
+            <span style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); padding:4px 10px; border-radius:8px; font-size:11px; color:#d1d5db;">💼 LinkedIn Posts</span>
+            <span style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); padding:4px 10px; border-radius:8px; font-size:11px; color:#d1d5db;">👥 Facebook Groups</span>
+            <span style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); padding:4px 10px; border-radius:8px; font-size:11px; color:#d1d5db;">⚡ Google Live Index</span>
+          </div>
+
+          <!-- Agent Filters Grid -->
+          <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:12px; background:rgba(0,0,0,0.3); padding:14px; border-radius:12px; border:1px solid rgba(255,255,255,0.06);">
+            <div>
+              <label style="font-size:11px; font-weight:700; color:var(--text-sub); text-transform:uppercase; display:block; margin-bottom:5px;">⏳ Recency / Freshness</label>
+              <select id="agentTimeRange" onchange="runFetchingAgent()" style="width:100%; height:38px; background:rgba(10,15,26,0.9); border:1px solid rgba(255,255,255,0.15); border-radius:8px; color:#fff; padding:0 10px; font-size:13px;">
+                <option value="24h">Past 24 Hours (Ultra Fresh)</option>
+                <option value="7d" selected>Past 7 Days (Active Buyers)</option>
+                <option value="30d">Past 30 Days (Current Month)</option>
+              </select>
+            </div>
+            <div>
+              <label style="font-size:11px; font-weight:700; color:var(--text-sub); text-transform:uppercase; display:block; margin-bottom:5px;">🌐 Source Platform</label>
+              <select id="agentSource" onchange="runFetchingAgent()" style="width:100%; height:38px; background:rgba(10,15,26,0.9); border:1px solid rgba(255,255,255,0.15); border-radius:8px; color:#fff; padding:0 10px; font-size:13px;">
+                <option value="all" selected>All Sources (Multi-Source Feed)</option>
+                <option value="reddit">Reddit (r/dubairealestate)</option>
+                <option value="expat_forums">Expat Relocation Portals</option>
+                <option value="linkedin">LinkedIn Executive Posts</option>
+                <option value="social">Facebook Investor Groups</option>
+                <option value="google_dorks">Google Live Dorks</option>
+              </select>
+            </div>
+            <div>
+              <label style="font-size:11px; font-weight:700; color:var(--text-sub); text-transform:uppercase; display:block; margin-bottom:5px;">💰 Budget Tier</label>
+              <select id="agentBudget" onchange="runFetchingAgent()" style="width:100%; height:38px; background:rgba(10,15,26,0.9); border:1px solid rgba(255,255,255,0.15); border-radius:8px; color:#fff; padding:0 10px; font-size:13px;">
+                <option value="all" selected>All Budgets (AED 600K - 40M)</option>
+                <option value="luxury">Ultra Luxury (AED 5M+)</option>
+                <option value="mid">Mid-Market (AED 2M - 5M)</option>
+                <option value="entry">Entry & High-Yield (&lt; AED 2M)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Fresh Inquiries Grid -->
+        <div id="fetchingAgentGrid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(440px, 1fr)); gap: 20px;">
           <!-- Populated dynamically -->
         </div>
       </div>
@@ -1248,7 +1320,130 @@
       runMining();
       runDorkMining();
       fetchInboundLeads();
+      runFetchingAgent();
     });
+
+    // Multi-Source AI Fetching Agent Functions
+    async function runFetchingAgent() {
+      const time_range = document.getElementById('agentTimeRange')?.value || '7d';
+      const source = document.getElementById('agentSource')?.value || 'all';
+      const budget_tier = document.getElementById('agentBudget')?.value || 'all';
+      const community = document.getElementById('selCommunity')?.value || 'All';
+
+      const grid = document.getElementById('fetchingAgentGrid');
+      if (grid) {
+        grid.innerHTML = `
+          <div style="grid-column: 1/-1; text-align:center; padding:50px 20px; background:var(--card-bg); border:1px solid var(--card-border); border-radius:18px;">
+            <div class="spinner" style="margin: 0 auto 16px auto;"></div>
+            <h4 style="font-size:16px; color:#fff; margin-bottom:6px;">Crawling Multi-Source Platforms...</h4>
+            <p style="font-size:13px; color:var(--text-muted);">Scanning Reddit r/dubairealestate, British Expats, LinkedIn & Google SERPs with &lt;= ${time_range} freshness filter</p>
+          </div>
+        `;
+      }
+
+      try {
+        const resp = await fetch('/api/fetching-agent', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ time_range, source, budget_tier, community })
+        });
+        const data = await resp.json();
+        const inquiries = data.fresh_buyer_inquiries || [];
+        const countBadge = document.getElementById('fetchingCount');
+        if (countBadge) countBadge.innerText = inquiries.length;
+        renderFetchingAgentCards(inquiries);
+      } catch(e) {
+        console.error("Fetching agent error:", e);
+        if (grid) {
+          grid.innerHTML = `<p style="color:#ef4444; grid-column:1/-1;">Error running agent: ${e.message}</p>`;
+        }
+      }
+    }
+
+    function renderFetchingAgentCards(items) {
+      const grid = document.getElementById('fetchingAgentGrid');
+      if (!grid) return;
+      grid.innerHTML = '';
+
+      if (items.length === 0) {
+        grid.innerHTML = `
+          <div style="grid-column: 1/-1; text-align:center; padding:50px 20px; background:var(--card-bg); border:1px solid var(--card-border); border-radius:18px;">
+            <div style="font-size:32px; margin-bottom:12px;">🔍</div>
+            <h4 style="font-size:16px; color:#fff; margin-bottom:6px;">No Inquiries Match This Filter Window</h4>
+            <p style="font-size:13px; color:var(--text-muted); max-width:440px; margin:0 auto;">Try expanding the time range to 'Past 7 Days' or selecting 'All Sources'.</p>
+          </div>
+        `;
+        return;
+      }
+
+      items.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'post-card';
+        card.style.borderColor = 'rgba(139, 92, 246, 0.4)';
+
+        card.innerHTML = `
+          <div>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; flex-wrap:wrap; gap:6px;">
+              <span class="post-platform-badge" style="background:rgba(139,92,246,0.15); border-color:rgba(139,92,246,0.35); color:#c4b5fd;">
+                ${item.platform_icon} ${item.source_platform}
+              </span>
+              <span style="display:inline-flex; align-items:center; gap:5px; background:rgba(16,185,129,0.15); border:1px solid #10b981; color:#6ee7b7; padding:2px 8px; border-radius:6px; font-size:11px; font-weight:700;">
+                <span style="width:6px; height:6px; background:#10b981; border-radius:50%; display:inline-block;"></span>
+                ${item.date_posted_relative}
+              </span>
+            </div>
+
+            <h4 style="font-size:16px; color:#fff; font-weight:700; margin-bottom:6px; line-height:1.4;">${item.title}</h4>
+
+            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap:8px; margin-bottom:12px; background:rgba(0,0,0,0.25); padding:10px 12px; border-radius:8px; border:1px solid rgba(255,255,255,0.05); font-size:12px;">
+              <div><span style="color:var(--text-sub); display:block; font-size:10px; text-transform:uppercase;">Stated Budget</span><strong style="color:#6ee7b7; font-size:13px;">${item.budget_display}</strong></div>
+              <div><span style="color:var(--text-sub); display:block; font-size:10px; text-transform:uppercase;">Area Focus</span><strong style="color:#93c5fd;">${item.area}</strong></div>
+              <div><span style="color:var(--text-sub); display:block; font-size:10px; text-transform:uppercase;">Buyer Intent</span><strong style="color:#c084fc;">${item.intent_score}% Direct</strong></div>
+              <div><span style="color:var(--text-sub); display:block; font-size:10px; text-transform:uppercase;">Financing</span><strong style="color:#fde047;">${item.financing.split(' ')[0]} ${item.financing.split(' ')[1] || ''}</strong></div>
+            </div>
+
+            <div class="post-snippet" style="border-left-color: #8b5cf6;">
+              "${item.snippet}"
+            </div>
+
+            <div class="contact-highlight-box" style="background:rgba(139,92,246,0.08); border-color:rgba(139,92,246,0.25);">
+              <div class="contact-highlight-item" style="color:#c4b5fd;">
+                <span>👤 Poster / Profile:</span>
+                <strong style="color:#fff;"><a href="${item.profile_url}" target="_blank" style="color:#c4b5fd; text-decoration:none;">${item.author_username} ↗</a></strong>
+              </div>
+              ${item.detected_phone ? `
+              <div class="contact-highlight-item">
+                <span>📞 Public Phone:</span>
+                <strong style="color:#34d399;"><a href="tel:${item.detected_phone}" style="color:#34d399; text-decoration:none;">${item.detected_phone}</a></strong>
+              </div>` : ''}
+              ${item.detected_email ? `
+              <div class="contact-highlight-item">
+                <span>✉️ Public Email:</span>
+                <strong style="color:#fff;">${item.detected_email}</strong>
+              </div>` : ''}
+            </div>
+          </div>
+
+          <div class="card-footer" style="flex-wrap:wrap; gap:8px;">
+            ${item.whatsapp_link ? `
+            <a href="${item.whatsapp_link}" target="_blank" class="btn-wa-direct" style="background:linear-gradient(135deg, #10b981, #059669);">
+              💬 WhatsApp (${item.detected_phone})
+            </a>` : ''}
+            <a href="${item.dm_link}" target="_blank" class="btn-desk-push" style="background:rgba(139,92,246,0.2); border-color:rgba(139,92,246,0.5); color:#ddd6fe; text-decoration:none;">
+              ✉️ Send Direct Message (DM)
+            </a>
+            <button class="btn-desk-push" onclick="navigator.clipboard.writeText('${item.outreach_pitch.replace(/'/g, "\\'")}'); showToast('Copied personalized pitch!');">
+              📋 Copy Pitch
+            </button>
+            <a href="${item.source_url}" target="_blank" class="btn-desk-push" style="color:#93c5fd; text-decoration:none;">
+              🔗 View Thread
+            </a>
+          </div>
+        `;
+
+        grid.appendChild(card);
+      });
+    }
   </script>
 </body>
 </html>

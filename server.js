@@ -9,6 +9,7 @@ const exportHandler = require('./api/export');
 const statusHandler = require('./api/status');
 const dorkMinerHandler = require('./api/dork-miner');
 const webhookHandler = require('./api/webhook');
+const fetchingAgentHandler = require('./api/fetching-agent');
 
 const PORT = process.env.PORT || 3000;
 
@@ -53,6 +54,8 @@ const server = http.createServer((req, res) => {
       return dorkMinerHandler(req, res);
     } else if (pathname === '/api/webhook') {
       return webhookHandler(req, res);
+    } else if (pathname === '/api/fetching-agent') {
+      return fetchingAgentHandler(req, res);
     } else if (pathname === '/api/search-demand') {
       return searchDemandHandler(req, res);
     } else if (pathname === '/api/export') {
