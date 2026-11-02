@@ -33,7 +33,7 @@
     }
 
     .container {
-      max-width: 1320px;
+      max-width: 1360px;
       margin: 0 auto;
       padding: 32px 24px;
     }
@@ -210,13 +210,16 @@
       align-items: center;
       margin-bottom: 24px;
       border-bottom: 1px solid var(--card-border);
+      flex-wrap: wrap;
+      gap: 12px;
     }
     .tabs-nav {
       display: flex;
       gap: 8px;
+      flex-wrap: wrap;
     }
     .tab-btn {
-      padding: 12px 20px;
+      padding: 12px 18px;
       background: none;
       border: none;
       border-bottom: 2px solid transparent;
@@ -269,13 +272,12 @@
       border-color: rgba(16, 185, 129, 0.3);
       color: #34d399;
     }
-    .btn-action.highlight:hover { background: rgba(16, 185, 129, 0.25); }
 
     /* Views */
     .tab-content { display: none; }
     .tab-content.active { display: block; }
 
-    /* Real Estate Enquiry Cards Grid */
+    /* Enquiry Cards Grid */
     .enquiries-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
@@ -435,6 +437,108 @@
     }
     .btn-desk-push:hover { background: rgba(255, 255, 255, 0.12); }
 
+    /* Dorks / Public Posts Section */
+    .dork-header-banner {
+      background: rgba(59, 130, 246, 0.1);
+      border: 1px solid rgba(59, 130, 246, 0.25);
+      border-radius: 16px;
+      padding: 18px 22px;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .dork-pills-list {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+    .dork-tag {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 6px 12px;
+      font-size: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      color: #93c5fd;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+    }
+    .dork-tag:hover {
+      background: rgba(59, 130, 246, 0.2);
+      border-color: rgba(59, 130, 246, 0.4);
+      color: #fff;
+    }
+
+    .public-posts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(440px, 1fr));
+      gap: 20px;
+    }
+    .post-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 18px;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      position: relative;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+    .post-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(59, 130, 246, 0.4);
+    }
+    .post-platform-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #93c5fd;
+      background: rgba(59, 130, 246, 0.15);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      padding: 4px 10px;
+      border-radius: 6px;
+      margin-bottom: 10px;
+    }
+    .post-snippet {
+      background: rgba(0, 0, 0, 0.3);
+      border-left: 3px solid #3b82f6;
+      padding: 12px 14px;
+      border-radius: 0 10px 10px 0;
+      font-size: 13px;
+      color: #e5e7eb;
+      line-height: 1.5;
+      margin: 12px 0 16px 0;
+    }
+    .contact-highlight-box {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      background: rgba(16, 185, 129, 0.08);
+      border: 1px solid rgba(16, 185, 129, 0.2);
+      padding: 10px 14px;
+      border-radius: 10px;
+      margin-bottom: 16px;
+    }
+    .contact-highlight-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-family: 'JetBrains Mono', monospace;
+      color: #34d399;
+    }
+
     /* Demand Matrix Grid */
     .demand-grid {
       display: grid;
@@ -540,7 +644,7 @@
       <div class="top-badges">
         <div class="status-pill">
           <span class="pulse-dot"></span>
-          <span>Google Search AI Engine Active</span>
+          <span>Google Search Dork & Lead Engine Active</span>
         </div>
       </div>
     </header>
@@ -608,8 +712,8 @@
     <!-- Live Execution Status Bar -->
     <div class="loader-wrap" id="loaderWrap">
       <div class="spinner"></div>
-      <h3 id="loaderStatus" style="font-size: 15px; margin-bottom: 4px;">Mining Real Estate Buyer Queries & Google Ads...</h3>
-      <p style="font-size: 13px; color: var(--text-muted);">Parsing high-intent buyer inquiries, budget requirements, and developer campaigns</p>
+      <h3 id="loaderStatus" style="font-size: 15px; margin-bottom: 4px;">Mining Real Estate Buyer Queries & Google Footprints...</h3>
+      <p style="font-size: 13px; color: var(--text-muted);">Executing Google Search dorks across forums, social groups, and developer ad campaigns</p>
     </div>
 
     <!-- Results Area -->
@@ -619,6 +723,10 @@
           <button class="tab-btn active" onclick="switchTab('enquiriesTab', this)">
             <span>📋 Real Estate Buyer Enquiries</span>
             <span class="tab-counter" id="enquiryCount">0</span>
+          </button>
+          <button class="tab-btn" onclick="switchTab('dorkPostsTab', this); runDorkMining();">
+            <span>🌐 Public Buyer Footprints (Google Dorks)</span>
+            <span class="tab-counter" id="dorkCount" style="background:#3b82f6; color:#fff;">6</span>
           </button>
           <button class="tab-btn" onclick="switchTab('searchDemandTab', this)">
             <span>🔍 Google Search Demand (Buyer Queries)</span>
@@ -643,7 +751,29 @@
         </div>
       </div>
 
-      <!-- Tab 2: Google Search Demand View -->
+      <!-- Tab 2: Public Buyer Footprints (Google Dorks) View -->
+      <div id="dorkPostsTab" class="tab-content">
+        <div class="dork-header-banner">
+          <div>
+            <h3 style="font-size:16px; color:#fff; margin-bottom:4px;">🌐 Public Buyer Inquiries Indexed on Google</h3>
+            <p style="font-size:13px; color:var(--text-muted);">Real individuals who posted property purchase requests on forums, social media, and classifieds with contact details.</p>
+          </div>
+          <button class="btn-action highlight" onclick="runDorkMining()">🔄 Refresh Google Dorks</button>
+        </div>
+
+        <div style="margin-bottom:12px; font-size:12px; font-weight:700; color:var(--text-sub); text-transform:uppercase;">
+          Active Google Dork Queries (Click to verify directly in Google):
+        </div>
+        <div class="dork-pills-list" id="dorkPillsList">
+          <!-- Populated dynamically -->
+        </div>
+
+        <div class="public-posts-grid" id="publicPostsGrid">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+
+      <!-- Tab 3: Google Search Demand View -->
       <div id="searchDemandTab" class="tab-content">
         <div class="demand-grid">
           <div class="demand-col">
@@ -665,7 +795,7 @@
         </div>
       </div>
 
-      <!-- Tab 3: Developer Ads View -->
+      <!-- Tab 4: Developer Ads View -->
       <div id="developerAdsTab" class="tab-content">
         <div id="developerAdsList">
           <!-- Populated dynamically -->
@@ -678,6 +808,7 @@
 
   <script>
     let currentData = null;
+    let currentDorkData = null;
 
     function setQuickPreset(comm, ptype) {
       document.getElementById('selCommunity').value = comm;
@@ -721,6 +852,98 @@
       } finally {
         loader.style.display = 'none';
       }
+    }
+
+    async function runDorkMining() {
+      const community = document.getElementById('selCommunity').value;
+      try {
+        const resp = await fetch('/api/dork-miner', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ community, platform: 'all' })
+        });
+        const data = await resp.json();
+        currentDorkData = data;
+        renderDorkPosts(data);
+      } catch (err) {
+        console.error("Dork miner error:", err);
+      }
+    }
+
+    function renderDorkPosts(data) {
+      const dorks = data.active_google_dorks || [];
+      const posts = data.public_buyer_posts || [];
+
+      document.getElementById('dorkCount').innerText = posts.length;
+
+      // Render Dork Links
+      const pillsContainer = document.getElementById('dorkPillsList');
+      pillsContainer.innerHTML = '';
+      dorks.forEach(d => {
+        const a = document.createElement('a');
+        a.className = 'dork-tag';
+        a.href = d.google_search_link;
+        a.target = '_blank';
+        a.innerHTML = `🔍 <span>${d.dork_query}</span> ↗`;
+        pillsContainer.appendChild(a);
+      });
+
+      // Render Posts Grid
+      const postsGrid = document.getElementById('publicPostsGrid');
+      postsGrid.innerHTML = '';
+      posts.forEach((post, idx) => {
+        const card = document.createElement('div');
+        card.className = 'post-card';
+        const primaryPhone = post.detected_phones[0] || '';
+        const primaryEmail = post.detected_emails[0] || '';
+
+        card.innerHTML = `
+          <div>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+              <span class="post-platform-badge">${post.platform_icon} ${post.platform}</span>
+              <span style="font-size:11px; color:var(--text-sub);">${post.date_posted}</span>
+            </div>
+            <h4 style="font-size:16px; color:#fff; font-weight:700; margin-bottom:4px;">${post.title}</h4>
+            <div style="font-size:12px; color:var(--text-muted); margin-bottom:10px;">Posted by: <strong>${post.author}</strong> • Area: <span style="color:#6ee7b7;">${post.area}</span> (${post.budget_display})</div>
+
+            <div class="post-snippet">
+              "${post.snippet}"
+            </div>
+
+            <div class="contact-highlight-box">
+              <div class="contact-highlight-item">
+                <span>📞 Real Phone:</span>
+                <strong style="color:#fff;">${primaryPhone || 'Inquire on platform'}</strong>
+              </div>
+              ${primaryEmail ? `
+              <div class="contact-highlight-item">
+                <span>✉️ Real Email:</span>
+                <strong style="color:#fff;">${primaryEmail}</strong>
+              </div>` : ''}
+            </div>
+          </div>
+
+          <div class="card-footer">
+            ${post.whatsapp_link ? `
+            <a href="${post.whatsapp_link}" target="_blank" class="btn-wa-direct">
+              💬 Direct WhatsApp
+            </a>` : ''}
+            <a href="${post.source_url}" target="_blank" class="btn-desk-push" style="text-decoration:none;">
+              🔗 View Original Post
+            </a>
+            <button class="btn-desk-push" onclick="copyContact('${post.author}', '${primaryPhone}', '${primaryEmail}')">
+              📋 Copy
+            </button>
+          </div>
+        `;
+        postsGrid.appendChild(card);
+      });
+    }
+
+    function copyContact(author, phone, email) {
+      const text = `Public Inquirer: ${author}\nPhone: ${phone}\nEmail: ${email}`;
+      navigator.clipboard.writeText(text);
+      showToast(`Copied ${author}'s contact info!`);
     }
 
     function renderEnquiryDashboard(data) {
@@ -881,6 +1104,7 @@
     // Run automatically on load
     window.addEventListener('DOMContentLoaded', () => {
       runMining();
+      runDorkMining();
     });
   </script>
 </body>
