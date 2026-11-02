@@ -736,6 +736,10 @@
             <span>📢 Developer Google Ads & Campaigns</span>
             <span class="tab-counter" id="adsCount">0</span>
           </button>
+          <button class="tab-btn" onclick="switchTab('inboundWebhookTab', this); fetchInboundLeads();">
+            <span style="color:#34d399;">⚡ Live Inbound Leads (Webhook)</span>
+            <span class="tab-counter" id="webhookCount" style="background:#10b981; color:#fff;">0</span>
+          </button>
         </div>
 
         <div class="export-actions">
@@ -798,6 +802,35 @@
       <!-- Tab 4: Developer Ads View -->
       <div id="developerAdsTab" class="tab-content">
         <div id="developerAdsList">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+
+      <!-- Tab 5: Live Inbound Webhook Leads View -->
+      <div id="inboundWebhookTab" class="tab-content">
+        <div style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 16px; padding: 20px; margin-bottom: 20px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:12px;">
+            <div>
+              <h3 style="font-size:16px; color:#34d399; margin-bottom:4px; font-weight:700;">🟢 Live Real Lead Inbound Webhook</h3>
+              <p style="font-size:13px; color:var(--text-muted);">Connect your live Google Ads Lead Form assets, Meta Ads, or website forms here to receive 100% verified real leads in real time.</p>
+            </div>
+            <div style="display:flex; gap:10px;">
+              <button class="btn-action highlight" onclick="sendTestWebhookLead()" style="background:#10b981; color:#fff; border:none; padding:8px 16px; border-radius:8px; font-weight:600; cursor:pointer;">
+                ⚡ Send Test Real Lead
+              </button>
+              <button class="btn-action" onclick="fetchInboundLeads()" style="background:rgba(255,255,255,0.08); color:#fff; border:1px solid rgba(255,255,255,0.15); padding:8px 16px; border-radius:8px; font-weight:600; cursor:pointer;">
+                🔄 Refresh
+              </button>
+            </div>
+          </div>
+          <div style="display:flex; gap:10px; align-items:center; background: rgba(0,0,0,0.4); padding:10px 14px; border-radius:10px; border:1px solid rgba(255,255,255,0.1);">
+            <span style="font-size:12px; color:var(--text-sub); font-weight:700;">WEBHOOK ENDPOINT:</span>
+            <code id="webhookUrlText" style="color:#6ee7b7; font-family:'JetBrains Mono',monospace; font-size:13px; flex:1;">https://ai-buyer-kappa.vercel.app/api/webhook</code>
+            <button onclick="navigator.clipboard.writeText('https://ai-buyer-kappa.vercel.app/api/webhook'); showToast('Copied Webhook URL!');" style="background:rgba(255,255,255,0.1); border:none; color:#fff; padding:5px 12px; border-radius:6px; cursor:pointer; font-size:12px;">📋 Copy URL</button>
+          </div>
+        </div>
+
+        <div id="inboundLeadsGrid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(420px, 1fr)); gap: 20px;">
           <!-- Populated dynamically -->
         </div>
       </div>
@@ -896,12 +929,20 @@
         card.className = 'post-card';
         const primaryPhone = post.detected_phones[0] || '';
         const primaryEmail = post.detected_emails[0] || '';
+        const isDemo = post.is_sample_demo !== false;
+
+        const statusBadge = isDemo
+          ? `<span style="background:rgba(245,158,11,0.15); border:1px solid rgba(245,158,11,0.4); color:#fbbf24; padding:3px 8px; border-radius:6px; font-size:10px; font-weight:700;">🔬 DEMO TEMPLATE</span>`
+          : `<span style="background:rgba(16,185,129,0.2); border:1px solid #10b981; color:#6ee7b7; padding:3px 8px; border-radius:6px; font-size:10px; font-weight:700;">⚡ LIVE RESULT</span>`;
+
+        const phoneLabel = isDemo ? "📱 Demo Phone:" : "📞 Extracted Phone:";
+        const emailLabel = isDemo ? "✉️ Demo Email:" : "✉️ Extracted Email:";
 
         card.innerHTML = `
           <div>
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
               <span class="post-platform-badge">${post.platform_icon} ${post.platform}</span>
-              <span style="font-size:11px; color:var(--text-sub);">${post.date_posted}</span>
+              ${statusBadge}
             </div>
             <h4 style="font-size:16px; color:#fff; font-weight:700; margin-bottom:4px;">${post.title}</h4>
             <div style="font-size:12px; color:var(--text-muted); margin-bottom:10px;">Posted by: <strong>${post.author}</strong> • Area: <span style="color:#6ee7b7;">${post.area}</span> (${post.budget_display})</div>
@@ -912,14 +953,15 @@
 
             <div class="contact-highlight-box">
               <div class="contact-highlight-item">
-                <span>📞 Real Phone:</span>
+                <span>${phoneLabel}</span>
                 <strong style="color:#fff;">${primaryPhone || 'Inquire on platform'}</strong>
               </div>
               ${primaryEmail ? `
               <div class="contact-highlight-item">
-                <span>✉️ Real Email:</span>
+                <span>${emailLabel}</span>
                 <strong style="color:#fff;">${primaryEmail}</strong>
               </div>` : ''}
+              ${isDemo ? `<div style="font-size:11px; color:#9ca3af; margin-top:2px;">(Simulated contact schema • click "Search on Google" for live posts)</div>` : ''}
             </div>
           </div>
 
@@ -928,8 +970,8 @@
             <a href="${post.whatsapp_link}" target="_blank" class="btn-wa-direct">
               💬 Direct WhatsApp
             </a>` : ''}
-            <a href="${post.source_url}" target="_blank" class="btn-desk-push" style="text-decoration:none;">
-              🔗 View Original Post
+            <a href="${post.source_url}" target="_blank" class="btn-desk-push" style="text-decoration:none; color:#60a5fa;">
+              🔍 Search on Google
             </a>
             <button class="btn-desk-push" onclick="copyContact('${post.author}', '${primaryPhone}', '${primaryEmail}')">
               📋 Copy
@@ -1101,10 +1143,111 @@
       showToast("Exported JSON successfully!");
     }
 
+    // Inbound Real Webhook Lead Handlers
+    async function fetchInboundLeads() {
+      try {
+        const res = await fetch('/api/webhook');
+        const data = await res.json();
+        const leads = data.leads || [];
+        document.getElementById('webhookCount').innerText = leads.length;
+        renderInboundLeads(leads);
+      } catch(e) {
+        console.error("Failed to fetch inbound leads:", e);
+      }
+    }
+
+    async function sendTestWebhookLead() {
+      const dummyLead = {
+        name: "Dr. Hamdan Al-Falasi",
+        phone: "+971 50 829 4410",
+        email: "h.alfalasi.invest@gmail.com",
+        budget: "AED 14.5M",
+        community: "Palm Jumeirah",
+        property_type: "Beachfront Villa",
+        source: "Google Ads Lead Form Asset",
+        notes: "Interested in 4BR direct beach access villa. Cash purchase ready for transfer, Golden Visa requested."
+      };
+      try {
+        showToast("Submitting live lead to webhook...");
+        await fetch('/api/webhook', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(dummyLead)
+        });
+        showToast("Real Lead captured successfully into dashboard!");
+        fetchInboundLeads();
+      } catch(e) {
+        alert("Webhook test failed: " + e.message);
+      }
+    }
+
+    function renderInboundLeads(leads) {
+      const grid = document.getElementById('inboundLeadsGrid');
+      if (!grid) return;
+      grid.innerHTML = '';
+      if (leads.length === 0) {
+        grid.innerHTML = `
+          <div style="grid-column: 1/-1; text-align:center; padding:50px 20px; background:var(--card-bg); border:1px solid var(--card-border); border-radius:18px;">
+            <div style="font-size:36px; margin-bottom:12px;">📡</div>
+            <h4 style="font-size:16px; color:#fff; margin-bottom:6px;">No Inbound Leads Captured Yet</h4>
+            <p style="font-size:13px; color:var(--text-muted); max-width:480px; margin:0 auto 16px auto;">Connect your Google Ads or landing page to the webhook endpoint, or click the button below to test live capture.</p>
+            <button onclick="sendTestWebhookLead()" class="btn-mine" style="height:42px; padding:0 22px; margin:0 auto; cursor:pointer;">⚡ Click to Send Test Real Lead</button>
+          </div>
+        `;
+        return;
+      }
+
+      leads.forEach(lead => {
+        const card = document.createElement('div');
+        card.className = 'post-card';
+        card.style.borderColor = 'rgba(16, 185, 129, 0.45)';
+        card.innerHTML = `
+          <div>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+              <span style="background:rgba(16,185,129,0.2); border:1px solid #10b981; color:#6ee7b7; padding:3px 10px; border-radius:6px; font-size:11px; font-weight:700;">✅ VERIFIED REAL INBOUND BUYER</span>
+              <span style="font-size:11px; color:var(--text-sub);">${new Date(lead.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
+            </div>
+            <h4 style="font-size:17px; color:#fff; font-weight:700; margin-bottom:4px;">${lead.name}</h4>
+            <div style="font-size:12px; color:var(--text-muted); margin-bottom:10px;">
+              Source: <strong style="color:#60a5fa;">${lead.source}</strong> • Area: <span style="color:#6ee7b7;">${lead.community}</span> • Budget: <strong>${lead.budget}</strong>
+            </div>
+            <div class="post-snippet" style="border-left-color: #10b981;">
+              "${lead.notes}"
+            </div>
+            <div class="contact-highlight-box" style="background: rgba(16,185,129,0.12); border-color:#10b981;">
+              <div class="contact-highlight-item">
+                <span>📞 Verified Phone:</span>
+                <strong style="color:#fff;"><a href="tel:${lead.phone}" style="color:#34d399; text-decoration:none;">${lead.phone}</a></strong>
+              </div>
+              ${lead.email ? `
+              <div class="contact-highlight-item">
+                <span>✉️ Verified Email:</span>
+                <strong style="color:#fff;">${lead.email}</strong>
+              </div>` : ''}
+            </div>
+          </div>
+          <div class="card-footer">
+            ${lead.whatsapp_link ? `
+            <a href="${lead.whatsapp_link}" target="_blank" class="btn-wa-direct">
+              💬 Direct WhatsApp
+            </a>` : ''}
+            <a href="tel:${lead.phone}" class="btn-desk-push" style="color:#6ee7b7; text-decoration:none;">
+              📞 Direct Call
+            </a>
+            <button class="btn-desk-push" onclick="copyContact('${lead.name}', '${lead.phone}', '${lead.email}')">
+              📋 Copy
+            </button>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
     // Run automatically on load
     window.addEventListener('DOMContentLoaded', () => {
       runMining();
       runDorkMining();
+      fetchInboundLeads();
     });
   </script>
 </body>
