@@ -358,7 +358,10 @@
           </div>
           <div>
             <label class="input-label">API Key / Token (Saved locally in browser)</label>
-            <input type="password" id="scraperApiKey" class="text-input" placeholder="Paste your SerpApi Key or Apify Token..." oninput="saveApiKey()">
+            <div style="position:relative;">
+              <input type="password" id="scraperApiKey" class="text-input" style="padding-right:45px;" placeholder="Paste your SerpApi Key or Apify Token..." oninput="saveApiKey()">
+              <button type="button" onclick="toggleKeyVisibility()" title="Toggle visibility" style="position:absolute; right:12px; top:50%; transform:translateY(-50%); background:none; border:none; color:var(--text-sub); cursor:pointer; font-size:16px;">👁️</button>
+            </div>
           </div>
           <div style="align-self: flex-end;">
             <button class="btn-primary" onclick="executeLiveScrape()">
@@ -464,6 +467,11 @@
       toast.innerText = msg;
       toast.style.display = 'block';
       setTimeout(() => { toast.style.display = 'none'; }, 3000);
+    }
+
+    function toggleKeyVisibility() {
+      const input = document.getElementById('scraperApiKey');
+      input.type = input.type === 'password' ? 'text' : 'password';
     }
 
     // Local Storage for API Keys
